@@ -109,7 +109,7 @@ Paste this information into the configuration file of the master and modify it a
 - In my case my master device (which is not my Raspberry Pi, but the main server) is: ens33
 - Pihole which in this case will be slave: eth0
 
-```yaml
+```bash
 vrrp_instance VI_1 {
   state MASTER
   interface ens33 #Ensure you use the correct interface name
