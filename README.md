@@ -25,7 +25,7 @@ I would like to provide an overview on how I have deployed and manage my homelab
 
 Contrary to everyone's home server I am running it completly different and for very specific reasons.
 
-My project begun back in 2009 with Windows Media Center, then it progressed to XBCM, then Kodi, then PLEX and from there on... with many hardware updates, it became my cloud instance, my photo library, my AI GPT, my DNS server, my VPN client, my password manager, etc... 
+My project begun back in 2009 with Windows Media Center, then it progressed to XBCM, then Kodi, then `PLEX` and from there on... with many hardware updates, it became my cloud instance, my photo library, my AI GPT, my DNS server, my VPN client, my password manager, etc... 
 
 The ultimate goal is with a modest spec-like server and a couple of Raspbery Pi's. Have a complete professional setup that can handle all my needs.
 
@@ -58,7 +58,7 @@ The configuaration might seem completly overhead and might look messy. But after
 ## Services running in the Raspberry Pi (bare-metal)
 
 ### Pi-hole
-**Description:** The Pi-hole® is a DNS sinkhole that protects your devices from unwanted content. I also use it as DHCP in my network.
+**Description:** The `Pi-hole`® is a DNS sinkhole that protects your devices from unwanted content. I also use it as DHCP in my network.
 The configuration is prety straight forward. In this case I run it directly on the Raspberry Pi.
 More info here: https://pi-hole.net/
 
@@ -81,7 +81,7 @@ curl -L https://install.pivpn.io | bash
 ```
 
 ### KeepAlived
-**Description:** Keepalived is a routing software to provide simple and robust facilities for loadbalancing and high-availability to Linux systems. Loadbalancing framework relies on well-known and widely used Linux Virtual Server (IPVS) kernel module.
+**Description:** `Keepalived` is a routing software to provide simple and robust facilities for loadbalancing and high-availability to Linux systems. Loadbalancing framework relies on well-known and widely used Linux Virtual Server (IPVS) kernel module.
 
 In my configuration, the Raspberry Pi will act as secondary device.
 The reason for this configuration is that my PiHole is more likely to survive random crashes and therefore I need the basic services always available.
@@ -94,7 +94,7 @@ These are:
 More info here: https://www.keepalived.org/
 
 **Configuration:**
-Install Keepalived on both servers where you’d like High Availability.
+Install `Keepalived` on both servers where you’d like High Availability.
 
 ```bash
 apt install keepalived
@@ -109,7 +109,7 @@ Paste this information into the configuration file of the master and modify it a
 - In my case my master device (which is not my Raspberry Pi, but the main server) is: ens33
 - Pihole which in this case will be slave: eth0
 
-```bash
+```yaml
 vrrp_instance VI_1 {
   state MASTER
   interface ens33 #Ensure you use the correct interface name
@@ -130,7 +130,7 @@ vrrp_instance VI_1 {
 }
 ```
 
-===========================================
+----
 
 ## Services running in the Raspberry Pi with Docker
 
@@ -152,7 +152,7 @@ It is best to follow the instructions from their [github page](https://github.co
 
 #### docker-compose.yml file
 
-```bash
+```yaml
 services:
   cloudflare-ddns:
     image: favonia/cloudflare-ddns:latest
