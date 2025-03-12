@@ -3,20 +3,13 @@
 ## Table of Contents
 1. [Overview](#overview)
 2. [Main Specs](#main-specs)
-3. [Services running in the Raspberry Pi (bare-metal)](#services-running-in-the-raspberry-pi-(bare-metal))
+3. [Services running in the Raspberry Pi (bare-metal)](#services-running-in-the-raspberry-pi-bare-metal)
    - [Pi-Hole](#pi-hole)
-     - [Description](#description)
-     - [Configuration](#configuration)
    - [PiVPN](#pivpn)
-     - [Description](#description)
-     - [Configuration](#configuration)
    - [Keepalived](#keepalived)
-     - [Description](#description)
-     - [Configuration](#configuration)
 4. [Services running in the Raspberry Pi with Docker](#services-running-in-the-raspberry-pi-with-docker)
    - [Cloudflare DDNS](#cloudflare-ddns)
-     - [Description](#description)
-     - [Configuration](#configuration) 
+   - 
 5. [Services in the Main Server](#services-in-the-main-server)
    - [Service 1](#service-1)
      - [Description](#description)
@@ -62,7 +55,7 @@ The configuaration might seem completly overhead and might look messy. But after
 - **WSL2 - Docker Desktop** Manages the AI, the image server and other services that are resource hungry.
 
 
-## Services running in the Raspberry Pi
+## Services running in the Raspberry Pi (bare-metal)
 
 ### Pi-hole
 **Description:** The Pi-hole® is a DNS sinkhole that protects your devices from unwanted content. I also use it as DHCP in my network.
@@ -70,7 +63,7 @@ The configuration is prety straight forward. In this case I run it directly on t
 More info here: https://pi-hole.net/
 
 **Configuration:**
-```
+```bash
 curl -sSL https://install.pi-hole.net | bash
 ```
 
@@ -82,7 +75,8 @@ More info here: https://www.pivpn.io/
 **Configuration:**
 Configuring Keepalived for High Availability
 Keepalived is designed to run on two separate hosts but share a virtual IP address. This ensures that if one goes down (the master), the backup will take over using the same virtual IP.
-```
+
+```bash
 curl -L https://install.pivpn.io | bash
 ```
 
@@ -101,11 +95,13 @@ More info here: https://www.keepalived.org/
 
 **Configuration:**
 Install Keepalived on both servers where you’d like High Availability.
-```
+
+```bash
 apt install keepalived
 ```
 Get the interface name (I used ens3, yours might be different), then modify the config file
-```
+
+```bash
 ip a
 nano /etc/keepalived/keepalived.conf
 ```
@@ -113,8 +109,7 @@ Paste this information into the configuration file of the master and modify it a
 - In my case my master device (which is not my Raspberry Pi, but the main server) is: ens33
 - Pihole which in this case will be slave: eth0
 
-
-```
+```bash
 vrrp_instance VI_1 {
   state MASTER
   interface ens33 #Ensure you use the correct interface name
@@ -155,8 +150,9 @@ More info here: https://github.com/favonia/cloudflare-ddns
 **Configuration:**
 It is best to follow the instructions from their [github page](https://github.com/favonia/cloudflare-ddns), that way you can configure it as it best suits you and it will help you with the Cloudflare API tokens.
 
-The docker compose file:
-```
+#### docker-compose.yml file
+
+```bash
 services:
   cloudflare-ddns:
     image: favonia/cloudflare-ddns:latest
