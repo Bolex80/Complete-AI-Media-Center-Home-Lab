@@ -3,21 +3,54 @@
 ## Table of Contents
 1. [Overview](#overview)
 2. [Main Specs](#main-specs)
-3. [Services running in the Raspberry Pi (bare-metal)](#services-running-in-the-raspberry-pi-bare-metal)
-   - [Pi-Hole](#pi-hole)
-   - [PiVPN](#pivpn)
-   - [Keepalived](#keepalived)
-4. [Services running in the Raspberry Pi with Docker](#services-running-in-the-raspberry-pi-with-docker)
-   - [Cloudflare DDNS](#cloudflare-ddns)
-   - 
-5. [Services in the Main Server](#services-in-the-main-server)
-   - [Service 1](#service-1)
-     - [Description](#description)
-     - [Configuration](#configuration)
-   - [Service 2](#service-2)
-     - [Description](#description)
-     - [Configuration](#configuration)4
-6. [Getting Started](#getting-started)
+3. [Services on the Raspberry Pi (bare-metal)](#services-on-the-raspberry-pi-bare-metal)
+   - [Pi-Hole](#pi-hole) - Adblocker - DNS Provider and DHCP Server
+   - [PiVPN](#pivpn) - Wireguard VPN
+   - [Keepalived](#keepalived) - High Availability Backup Server
+   - [Rpi Monitor](#rpi-monitor) - Monitoring Stats for the Raspberry Pi
+4. [Services on the Raspberry Pi with Docker](#services-on-the-raspberry-pi-with-docker)
+   - [Cloudflare DDNS](#cloudflare-ddns) - Public IP DDNS updater for Cloudflare
+   - [Nginx Proxy Manager](#nginx-proxy-manager) - Reverse Proxy - used as Backup 
+   - [SearXNG](#searxng) - Metasearch Engine - used as Backup
+   - [Vaultwarden](#vaultwarden) - Password Manager - used as Backup
+   - [Homer Dashboard](#homer-dashboard) - Homepage - used as Backup
+5. [Services on the Main Server](#services-running-on-the-main-server) - These are running directly on Windows 11
+   - [Plex](#plex) - Home Media Server
+   - [Tautulli](#tautulli) - Stats App for Plex
+6. [Services on the Ubuntu Server 1](#services-on-the-ubuntu-server-1)
+   - [Keepalived](#keepalived) - High Availability - Main Server
+   - [Secondary PiHole](#secondary-pihole) - Adblocker - DNS Provider
+   - [Nginx Proxy Manager](#nginx-proxy-manager) - Main Reverse Proxy
+   - [Homer Dashboard](#homer-dashboard) - Homepage
+   - [SearXNG](#searxng) - Metasearch Engine
+   - [Vaultwarden](#vaultwarden) - Password Manager
+   - [Uptime Kuma](#uptime-kuma) - Monitoring Tool
+   - [Beszel System Monitor](#beszel-system-monitor) - Another Monitoring Tool
+   - [Speedtest Tracker](#speedtest-tracker) - Internet Connection Performance
+   - [Cloudflare DDNS](#cloudflare-ddns) - Public IP DDNS updater for Cloudflare
+   - [IT Tools](#it-tools) - Handy IT Tool repository
+   - [Themepark](#themepark) - Themes and skins for various Apps
+   - [Guacamole](#guacamole) - Remote desktop gateway
+
+7. [Services on the Ubuntu Server 2](#services-on-the-ubuntu-server-2)
+   - [NextCloud](#nextcloud) - Personal Cloud
+   - [Crafty Controller](#crafty-controller) - Minecraft Server
+   - [Stirling PDF](#stirling-pdf) - PDF Tools
+
+7. [Services on WSL2 - Docker Desktop](#services-on-wsl2-docker-desktop) - These Require High CPU and GPU usage
+   - [Ollama](#Ollama) - Large Language Model 
+   - [Open WebUI](#open-webui) - web interface for AI Models
+   - [Immich](#immich) - Photo & Video Management APP
+   - [MeTube](#metube) - Youtube Video & Music Downloadar
+   - [N8N](#n8n) - AI Workflow Automation
+   - [Qdrant](#qdrant) - Vector Database
+   - [Apache Tika](#apache-tika) - Text and Metadata extractor
+   - [Libre Translate](#libre-translate) - AI translator
+8. [Common services](#common-services)
+   - [Portainer](#portainer) - Docker Management interface (All Servers)
+   - [Redis DB](#redis-db) - Scalable Data Base (Some services use it)
+   - [Watchtower](#watchtower) - Automated Docker container updates (All Servers)
+9. [Bonus Information](#bonus-information)
 
 ## Overview
 
@@ -39,6 +72,8 @@ The ultimate goal is with a modest spec-like server and a couple of Raspbery Pi'
 ### Main Server 🖥️
 - AMD Ryzen 9 5900X
 - 64 GB RAM
+- GPU0: NVIDIA RTX 4060ti 16GB VRAM
+- GPU1: NVIDIA GTX 1650 4GB VRAM
 - 1 TB M.2 NVMe Drive for the OS (1TB) (Windows 11)
 - 1 TB M.2 NVMe Drive for Virtual Machines
 - 500 GB M.2 NVMe Drive for Next Cloud
@@ -55,7 +90,7 @@ The configuaration might seem completly overhead and might look messy. But after
 - **WSL2 - Docker Desktop** Manages the AI, the image server and other services that are resource hungry.
 
 
-## Services running in the Raspberry Pi (bare-metal)
+## Services on the Raspberry Pi (bare-metal)
 
 ### Pi-hole
 **Description:** The `Pi-hole`® is a DNS sinkhole that protects your devices from unwanted content. I also use it as DHCP in my network.
@@ -132,10 +167,10 @@ vrrp_instance VI_1 {
 
 ----
 
-## Services running in the Raspberry Pi with Docker
+## Services on the Raspberry Pi with Docker
 
 📡
-**This next section will include the services running in docker**
+**This next section will include the services running on docker**
 📡
 
 If you need help installing docker on the raspberry pi, you can find information in the following link: 
