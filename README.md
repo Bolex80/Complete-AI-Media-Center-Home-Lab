@@ -1,5 +1,7 @@
 # **COMPLETE AI MEDIA CENTER HOME LAB**
 
+![BOLEX-NETWORK](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/images/BentomoNET-2025.png)
+
 ## Table of Contents
 1. [Overview](#overview)
 2. [Main Specs](#main-specs)
