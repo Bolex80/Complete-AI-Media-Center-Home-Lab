@@ -45,7 +45,7 @@ The configuaration might seem completly overhead and might look messy. But after
 
 ## Services Overview
 
-1. [Services on the Raspberry Pi (bare-metal)](#services-on-the-raspberry-pi-bare-metal)
+1. [Services on the Raspberry Pi (bare-metal)](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/docs/installation/raspberry-pi-services.md)
    - [Pi-Hole](#pi-hole) - Adblocker - DNS Provider and DHCP Server
    - [PiVPN](#pivpn) - Wireguard VPN
    - [Keepalived](#keepalived) - High Availability Backup Server
