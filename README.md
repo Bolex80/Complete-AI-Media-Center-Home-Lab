@@ -1,6 +1,6 @@
 # **COMPLETE AI MEDIA CENTER HOME LAB**
 
-![BOLEX-Intro image](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/images/intro.png)
+![BOLEX-Intro image](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/images/intro-color.png)
 
 
 ## Introduction and overview
