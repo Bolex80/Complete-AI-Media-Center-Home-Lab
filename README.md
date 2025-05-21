@@ -12,30 +12,42 @@ My project begun back in 2009 with Windows Media Center, then it progressed to X
 
 The ultimate goal is with a modest spec-like server and a couple of Raspbery Pi's. Have a complete professional setup that can handle all my needs.
 
-## Quick start guide
-...
+## Notice
+It is imperative to note that you need to have some pre-knowledge regarding docker, docker compose, containers and how they operatate. This guide has been designed for my own personal usage and is not intended as full guide for Noobs.
 
 ## Hardware specs
 
 ### Complementary Servers 🤖
-- Raspberry Pi4 with 2GB running [Wireguard with PiVPN](https://www.pivpn.io/) and [PiHole](https://pi-hole.net/) as well as serving as backup Search engine ([SearXNG](https://github.com/searxng/searxng)) and Password Vault ([Vaultwarden](https://github.com/dani-garcia/vaultwarden)).
-- Secondary backup Rasberry Pi 4 - Same specs and I do weekly SD Card backups. 
+- Main Raspberry Pi4 with 2GB running [Wireguard with PiVPN](https://www.pivpn.io/) and [PiHole](https://pi-hole.net/) as well as serving as backup Search engine ([SearXNG](https://github.com/searxng/searxng)) and Password Vault ([Vaultwarden](https://github.com/dani-garcia/vaultwarden)).
+- Secondary backup Rasberry Pi 4 (Same specs and I do weekly SD Card backups).
+  
+Both running in a [GeekPi Cluster Case](https://www.amazon.com/GeeekPi-Raspberry-Cluster-Cooling-Heatsink/dp/B07MW3GM1T?th=1)  
 
 
 ### Main Server 🖥️
 - AMD Ryzen 9 5900X
 - 64 GB RAM
-- GPU0: NVIDIA RTX 4060ti 16GB VRAM
-- GPU1: NVIDIA GTX 1650 4GB VRAM
+- GPU-0: NVIDIA RTX 4060ti 16GB VRAM
+- GPU-1: NVIDIA GTX 1650 4GB VRAM
 - 1 TB M.2 NVMe Drive for the OS (1TB) (Windows 11)
 - 1 TB M.2 NVMe Drive for Virtual Machines
-- 500 GB M.2 NVMe Drive for Next Cloud
+- 500 GB M.2 NVMe Drive for NextCloud
 - 1 TB SSD for Windows Server 2025 Virtual Machine
-- 3x 12TB HDD in a Parity Storage Space (main drive for Media)
+- 3x 12TB HDD in a Parity Storage Space (Main Drive for Media)
 - 3x 3TB HDD in a Parity Storage Space for Backup
 - Bluray RE drive (for legacy reasons)
+- 2x 2.5Gb Ethernet adapters
 
-The configuaration might seem completly overhead and might look messy. But after fine tuning, it covers perfectly well all my needs and runs on an average of 180-200 W (this includes, the raspberry, the swith, the 2 routers, and the TV Decoder)
+### Additional Hardware
+- Switch [AMPCOM 2.5GbE Managed Switch](https://www.ampcom.hk/products/ampcom-2-5gbe-managed-switch-8-port-2-5gbase-t-network-switcher-10g-sfp-slot-uplink-web-management-qos-vlan-lacp-fanless)
+- WiFi Router [Xiaomi Mesh System AX3000](https://www.mi.com/global/product/xiaomi-mesh-system-ax3000/)
+- KVM (Keyboard, Video, Mouse) remote controller [JetKVM](https://jetkvm.com/)
+- UPS 1: [CyberPower VP1000ELCD](https://www.cyberpower.com/eu/en/product/sku/vp1000elcd) - Used for Networking gear and the Raspberry Pi's.
+- UPS 2: [Schneider Electric APC Back-UPS 1200VA](https://www.se.com/il/en/product/BX1200MI-GR/apc-backups-1200va-230v-avr-schuko-sockets/) - Used to keep the main server running for a few minutes.
+
+
+
+The configuaration might seem completly overhead and might look messy. But after fine tuning, it covers perfectly well all my needs and runs on an average of 200-220 W when semi-idle (this includes, the raspberry, the swith, the 2 routers). If I start using the GPU, it will rasise to 350 W aprox.
 
 - **Main OS** (windows 11) is used for regular office work via RDP and acts as hypervisor.
 - **Hyper-V** is used to manage a windows server 2025 that is used for downloads.
@@ -45,7 +57,7 @@ The configuaration might seem completly overhead and might look messy. But after
 
 ## Services Overview
 
-1. [Services on the Raspberry Pi (bare-metal)](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/docs/installation/raspberry-pi-services.md)
+1. [Services on the Raspberry Pi (bare-metal)](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/docs/installation/raspberry-pi-services.md) - Both Raspeberry Pi's are clones of each other and have the same services running.
    - [Pi-Hole](#pi-hole) - Adblocker - DNS Provider and DHCP Server
    - [PiVPN](#pivpn) - Wireguard VPN
    - [Keepalived](#keepalived) - High Availability Backup Server
@@ -80,13 +92,15 @@ The configuaration might seem completly overhead and might look messy. But after
    - [Stirling PDF](#stirling-pdf) - PDF Tools
 
 6. [Services on WSL2 - Docker Desktop](#services-on-wsl2-docker-desktop) - These Require High CPU and GPU usage
-   - [Ollama](#Ollama) - Large Language Model 
-   - [Open WebUI](#open-webui) - web interface for AI Models
+   - [Ollama](#Ollama) - Large Language Models locally deployed 
+   - [Open WebUI](#open-webui) - Web interface for AI Models
    - [Immich](#immich) - Photo & Video Management App
-   - [MeTube](#metube) - Youtube Video & Music Downloadar
+   - [Postgres](#postgres) - Main database for N8N and LiteLLM
+   - [LiteLLM](#litellm) - Interface to access and montior multiple LLMs
+   - [MeTube](#metube) - Youtube Video & Music Downloader
    - [N8N](#n8n) - AI Workflow Automation
-   - [Qdrant](#qdrant) - Vector Database
-   - [Apache Tika](#apache-tika) - Text and Metadata extractor
+   - [Qdrant](#qdrant) - Vector Database (used for N8N)
+   - [Apache Tika](#apache-tika) - Text and Metadata extractor (used for Open WebUI)
    - [Libre Translate](#libre-translate) - AI Translator
 
 7. [Common services](#common-services) - These are docker containers that are used in all/most machines.
