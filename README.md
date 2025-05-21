@@ -12,7 +12,8 @@ My project begun back in 2009 with Windows Media Center, then it progressed to X
 
 The ultimate goal is with a modest spec-like server and a couple of Raspbery Pi's. Have a complete professional setup that can handle all my needs.
 
-## Notice
+## Disclaimer
+This project is provided "as is" without warranty of any kind, express or implied. Use at your own risk. The author is not liable for any damages or losses resulting from the use of this project. 
 It is imperative to note that you need to have some pre-knowledge regarding docker, docker compose, containers and how they operatate. This guide has been designed for my own personal usage and is not intended as full guide for Noobs.
 
 ## Hardware specs
