@@ -59,9 +59,9 @@ The configuaration might seem completly overhead and might look messy. But after
 ## Services Overview
 
 1. [Services on the Raspberry Pi (bare-metal)](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/docs/installation/raspberry-pi-services.md) - Both Raspeberry Pi's are clones of each other and have the same services running.
-   - [Pi-Hole](#pi-hole) - Adblocker - DNS Provider and DHCP Server
+   - [Pi-Hole](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/docs/installation/raspberry-pi-services.md#pi-hole) - Adblocker - DNS Provider and DHCP Server
    - [PiVPN](#pivpn) - Wireguard VPN
-   - [Keepalived](#keepalived) - High Availability Backup Server
+   - [Keepalived](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/docs/high-availabilty.md#keepalived) - High Availability Backup Server
    - [Rpi Monitor](#rpi-monitor) - Monitoring Stats for the Raspberry Pi
 2. [Services on the Raspberry Pi with Docker](#services-on-the-raspberry-pi-with-docker)
    - [Cloudflare DDNS](#cloudflare-ddns) - Public IP DDNS updater for Cloudflare
