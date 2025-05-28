@@ -1,6 +1,8 @@
 
 # Services on the Raspberry Pi (bare-metal)
 
+Before going into the detailed configuration of the services. I have opted to use both raspberry pi's with SDD external drives for stability and efficiency purposes.
+
 **Pre configuration steps: To run the OS via an SSD on the Raspberry Pi:**
 ### Running the OS on an SSD for stability 
 
