@@ -60,11 +60,11 @@ The configuaration might seem completly overhead and might look messy. But after
 
 1. [Services on the Raspberry Pi (bare-metal)](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/docs/installation/raspberry-pi-services.md) - Both Raspeberry Pi's are clones of each other and have the same services running.
    - [Pi-Hole](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/docs/installation/raspberry-pi-services.md#pi-hole) - Adblocker - DNS Provider and DHCP Server
-   - [PiVPN](#pivpn) - Wireguard VPN
+   - [PiVPN](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/docs/installation/raspberry-pi-services.md#pivpn) - Wireguard VPN
    - [Keepalived](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/docs/high-availability.md) - High Availability Backup Server
-   - [Rpi Monitor](#rpi-monitor) - Monitoring Stats for the Raspberry Pi
+   - [Rpi Monitor](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/docs/installation/raspberry-pi-services.md#rpi-monitor) - Monitoring Stats for the Raspberry Pi
 2. [Services on the Raspberry Pi with Docker](#services-on-the-raspberry-pi-with-docker)
-   - [Cloudflare DDNS](#cloudflare-ddns) - Public IP DDNS updater for Cloudflare
+   - [Cloudflare DDNS](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/docs/installation/raspberry-pi-services.md#cloudflare-ddns) - Public IP DDNS updater for Cloudflare
    - [Nginx Proxy Manager](#nginx-proxy-manager) - Reverse Proxy - used as Backup 
    - [SearXNG](#searxng) - Metasearch Engine - used as Backup
    - [Vaultwarden](#vaultwarden) - Password Manager - used as Backup
