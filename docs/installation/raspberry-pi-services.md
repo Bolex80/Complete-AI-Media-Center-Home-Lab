@@ -1,5 +1,6 @@
 
 ## Services on the Raspberry Pi (bare-metal)
+# Services on the Raspberry Pi (bare-metal)
 
 ### Pi-hole
 **Description:** The `Pi-hole`® is a DNS sinkhole that protects your devices from unwanted content. I also use it as DHCP in my network.
