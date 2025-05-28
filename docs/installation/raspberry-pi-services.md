@@ -1,6 +1,62 @@
 
 # Services on the Raspberry Pi (bare-metal)
 
+**Pre configuration steps: To run the OS via an SSD on the Raspberry Pi:**
+### Running the OS on an SSD for stability 
+
+Credits go to: https://chiragdesai.uk/upgrade-raspberry-pi-4-with-an-ssd-drive/
+
+## Configuring the Raspberry Pi to use the SSD drive
+
+    Presuming your Raspberry Pi is up and running, you need to connect to it and alter the boot order of the device. This means it’ll try to boot from the USB-attached SSD drive before trying to use the SD card.
+
+ 1. Update your bootloader
+     ```bash
+     sudo raspi-config
+     ```
+2. Select Advanced options
+3. Select bootloader version
+4. Select latest
+5. Press esc a few times to exit
+     ```bash
+     sudo reboot
+     
+     sudo rpi-eeprom-update
+     
+     sudo reboot
+     ```
+6. If an update is available, install it.
+     ```bash
+     sudo rpi-eeprom-update -a
+     
+     sudo reboot
+     ```
+7. View your eeprom configuration:
+     ```bash
+     sudo rpi-eeprom-config
+     ```
+
+8. Edit your eeprom config
+     ```bash
+    sudo -E rpi-eeprom-config --edit
+
+    sudo reboot
+     ```
+9. Make sure your boot order is listed as above.
+
+        The boot order is read in reverse. 
+
+        4 means try usb 3
+
+        1 means try sd card
+
+        F means start over.
+
+        You want 0xf14 so it tries this order: USB3, SD, start over.
+
+
+
+## Pi-hole
 **Description:** The `Pi-hole`® is a DNS sinkhole that protects your devices from unwanted content. I also use it as DHCP in my network.
 The configuration is prety straight forward. In this case I run it directly on the Raspberry Pi.
 More info here: https://pi-hole.net/
@@ -10,7 +66,7 @@ More info here: https://pi-hole.net/
 curl -sSL https://install.pi-hole.net | bash
 ```
 
-### PiVPN
+## PiVPN
 **Description:** The simplest way to setup and manage a VPN, designed for Raspberry Pi. This uses Wireguard to connect to my home server securely.
 Configuration is very simple, just follow the instructions.
 More info here: https://www.pivpn.io/
@@ -23,10 +79,12 @@ Keepalived is designed to run on two separate hosts but share a virtual IP addre
 curl -L https://install.pivpn.io | bash
 ```
 
-### KeepAlived
+## KeepAlived
 **Description:** `Keepalived` is a routing software to provide simple and robust facilities for loadbalancing and high-availability to Linux systems. Loadbalancing framework relies on well-known and widely used Linux Virtual Server (IPVS) kernel module.
 
-In my configuration, the Raspberry Pi will act as secondary device.
+In my configuration, I will use 3 machines that will run different services.
+The Ubuntu machine is the primary device for HTTP traffic and will failover to the Primary Raspberry Pi.
+The Raspberry Pi will act as secondary device for HTTP traffic, but will be primary for DNS requests and VPN traffic.
 The reason for this configuration is that my PiHole is more likely to survive random crashes and therefore I need the basic services always available.
 These are:
   - Pi-hole
@@ -36,46 +94,12 @@ These are:
 
 More info here: https://www.keepalived.org/
 
-**Configuration:**
-Install `Keepalived` on both servers where you’d like High Availability.
-
-```bash
-apt install keepalived
-```
-Get the interface name (I used ens3, yours might be different), then modify the config file
-
-```bash
-ip a
-nano /etc/keepalived/keepalived.conf
-```
-Paste this information into the configuration file of the master and modify it as needed.
-- In my case my master device (which is not my Raspberry Pi, but the main server) is: ens33
-- Pihole which in this case will be slave: eth0
-
-```bash
-vrrp_instance VI_1 {
-  state MASTER
-  interface ens33 #Ensure you use the correct interface name
-  virtual_router_id 20
-  advert_int 1
-  unicast_src_ip 192.168.2.201 # This is where I have my main Server
-  unicast_peer {
-    192.168.2.200 #This is my PiHole IP
-  }
-  priority 150
-  authentication {
-    auth_type PASS
-    auth_pass Lw7Oo8PQ
-  }
-  virtual_ipaddress {
-    192.168.2.3/24
-  }
-}
-```
+### **Detailed Configuration:**
+The full details on how to setup keepalived on my 3 servers can be found [HERE](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/docs/high-availability.md)  
 
 ----
 
-## Services on the Raspberry Pi with Docker
+# Services on the Raspberry Pi with Docker
 
 📡
 **This next section will include the services running on docker**
