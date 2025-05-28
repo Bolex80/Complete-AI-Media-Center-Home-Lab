@@ -3,58 +3,58 @@
 
 Before going into the detailed configuration of the services. I have opted to use both raspberry pi's with SDD external drives for stability and efficiency purposes.
 
-**Pre configuration steps: To run the OS via an SSD on the Raspberry Pi:**
-### Running the OS on an SSD for stability 
+  **Pre configuration steps: To run the OS via an SSD on the Raspberry Pi:**
+  ### Running the OS on an SSD for stability 
 
-Credits go to: https://chiragdesai.uk/upgrade-raspberry-pi-4-with-an-ssd-drive/
+  Credits go to: https://chiragdesai.uk/upgrade-raspberry-pi-4-with-an-ssd-drive/
 
-## Configuring the Raspberry Pi to use the SSD drive
+  ## Configuring the Raspberry Pi to use the SSD drive
 
-    Presuming your Raspberry Pi is up and running, you need to connect to it and alter the boot order of the device. This means it’ll try to boot from the USB-attached SSD drive before trying to use the SD card.
+      Presuming your Raspberry Pi is up and running, you need to connect to it and alter the boot order of the device. This means it’ll try to boot from the USB-attached SSD drive before trying to use the SD card.
 
- 1. Update your bootloader
-     ```bash
-     sudo raspi-config
-     ```
-2. Select Advanced options
-3. Select bootloader version
-4. Select latest
-5. Press esc a few times to exit
-     ```bash
-     sudo reboot
-     
-     sudo rpi-eeprom-update
-     
-     sudo reboot
-     ```
-6. If an update is available, install it.
-     ```bash
-     sudo rpi-eeprom-update -a
-     
-     sudo reboot
-     ```
-7. View your eeprom configuration:
-     ```bash
-     sudo rpi-eeprom-config
-     ```
+  1. Update your bootloader
+      ```bash
+      sudo raspi-config
+      ```
+  2. Select Advanced options
+  3. Select bootloader version
+  4. Select latest
+  5. Press esc a few times to exit
+      ```bash
+      sudo reboot
+      
+      sudo rpi-eeprom-update
+      
+      sudo reboot
+      ```
+  6. If an update is available, install it.
+      ```bash
+      sudo rpi-eeprom-update -a
+      
+      sudo reboot
+      ```
+  7. View your eeprom configuration:
+      ```bash
+      sudo rpi-eeprom-config
+      ```
 
-8. Edit your eeprom config
-     ```bash
-    sudo -E rpi-eeprom-config --edit
+  8. Edit your eeprom config
+      ```bash
+      sudo -E rpi-eeprom-config --edit
 
-    sudo reboot
-     ```
-9. Make sure your boot order is listed as above.
+      sudo reboot
+      ```
+  9. Make sure your boot order is listed as above.
 
-        The boot order is read in reverse. 
+          The boot order is read in reverse. 
 
-        4 means try usb 3
+          4 means try usb 3
 
-        1 means try sd card
+          1 means try sd card
 
-        F means start over.
+          F means start over.
 
-        You want 0xf14 so it tries this order: USB3, SD, start over.
+          You want 0xf14 so it tries this order: USB3, SD, start over.
 
 
 
