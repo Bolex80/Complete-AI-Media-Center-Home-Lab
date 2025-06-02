@@ -29,7 +29,7 @@ Both running in a [GeekPi Cluster Case](https://www.amazon.com/GeeekPi-Raspberry
 - AMD Ryzen 9 5900X
 - 64 GB RAM
 - GPU-0: NVIDIA RTX 4060ti 16GB VRAM
-- GPU-1: NVIDIA GTX 1650 4GB VRAM
+- GPU-1: NVIDIA GTX 1650 4GB VRAM (removed to allow the JetKVM ATX Extension connector. Plus I no longer needed two GPUs)
 - 1 TB M.2 NVMe Drive for the OS (1TB) (Windows 11)
 - 1 TB M.2 NVMe Drive for Virtual Machines
 - 500 GB M.2 NVMe Drive for NextCloud
@@ -110,10 +110,10 @@ The configuaration might seem completly overhead and might look messy. But after
    - [Watchtower](#watchtower) - Automated Docker container updates (All Servers)
 
 8. [Bonus Information](#bonus-information)
-
+   - [Backups scripts](#backup-scripts)
+   - [Windows Tips & Tricks](#windows-tips-&-tricks)
 ## Architecture diagram
 
 ![BOLEX-NETWORK](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/images/BentomoNET-2025.png)
 
 
-## Prerequisites
