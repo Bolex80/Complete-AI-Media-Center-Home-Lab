@@ -54,6 +54,8 @@ The configuaration might seem completly overhead and might look messy. But after
 - The network equipment (Routers,  Raspberry Pis, Swith, KVM and external HD) consume an average of 50-60W.
 - Main server in Idle 150-160 W. If I start using the GPU, it will rasise to 350 W aprox.
 
+##
+
 - **Main OS** (windows 11) is used for regular office work via RDP protected by DUO security and acts as hypervisor.
 - **Hyper-V** is used to manage a windows server 2025 that is used for Torrent downloads and other external VPN connection needs.
 - **VMware Workstation Pro** manages the linux servers (3 in total).
