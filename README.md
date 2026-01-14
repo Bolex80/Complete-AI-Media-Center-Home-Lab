@@ -29,11 +29,10 @@ Both running in a [GeekPi Cluster Case](https://www.amazon.com/GeeekPi-Raspberry
 ### Main Server 🖥️
 - AMD Ryzen 9 5900X
 - 64 GB RAM
-- GPU-0: NVIDIA RTX 4060ti 16GB VRAM
-- GPU-1: NVIDIA GTX 1650 4GB VRAM (removed to allow the JetKVM ATX Extension connector. Plus I no longer needed two GPUs)
-- 1 TB M.2 NVMe Drive for the OS (1TB) (Windows 11)
+- GPU: NVIDIA RTX 4060ti 16GB VRAM
+- 2 TB M.2 NVMe Drive for the OS (2TB) (Windows 11)
 - 1 TB M.2 NVMe Drive for Virtual Machines
-- 500 GB M.2 NVMe Drive for NextCloud
+- 1 TB M.2 NVMe Drive for NextCloud VM
 - 1 TB SSD for Windows Server 2025 Virtual Machine
 - 3x 12TB HDD in a Parity Storage Space (Main Drive for Media)
 - 3x 3TB HDD in a Parity Storage Space for Backup
@@ -53,6 +52,21 @@ Both running in a [GeekPi Cluster Case](https://www.amazon.com/GeeekPi-Raspberry
 The configuaration might seem completly overhead and might look messy. But after fine tuning, it covers perfectly well all my needs and runs on an average of 200-220 W when semi-idle. 
 - The network equipment (Routers,  Raspberry Pis, Swith, KVM and external HD) consume an average of 50-60W.
 - Main server in Idle 150-160 W. If I start using the GPU, it will rasise to 350 W aprox.
+
+## Cloud Instances (Oracle Cloud)
+### Main Cloud VM 
+2 Cores 16GB RAM (VM.Standard.A1.Flex (Altra processor from Ampere))
+Running the following services:
+- Wireguard
+- Stirling PDF
+- Pi-Hole
+- SearXNG
+
+### Secondary Cloud VM 
+2 Cores 8GB RAM (VM.Standard.A1.Flex (Altra processor from Ampere))
+Running the following services:
+- Panglolin
+- Crowdsec
 
 ##
 
@@ -121,6 +135,10 @@ The configuaration might seem completly overhead and might look messy. But after
    - [Windows Tips & Tricks](#windows-tips-&-tricks)
 ## Architecture diagram
 
+High level architecure:
+![BOLEX-INFRA](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/images/Bolex Cartoon Network Infrastructure-NoIP.png)
+
+More detailed network infrastructure:
 ![BOLEX-NETWORK](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/images/BentomoNET-2025.png)
 
 
