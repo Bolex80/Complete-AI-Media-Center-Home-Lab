@@ -135,8 +135,8 @@ Running the following services:
    - [Windows Tips & Tricks](#windows-tips-&-tricks)
 ## Architecture diagram
 
-High level architecure:
-![BOLEX-INFRA](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/images/Bolex Cartoon Network Infrastructure-NoIP.png)
+High level architecture:
+![BOLEX-NET](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/images/Bolex-NET.png)
 
 More detailed network infrastructure:
 ![BOLEX-NETWORK](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/images/BentomoNET-2025.png)
