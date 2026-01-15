@@ -54,10 +54,10 @@ The configuaration might seem completly overhead and might look messy. But after
 - Main server in Idle 150-160 W. If I start using the GPU, it will rasise to 350 W aprox.
 
 ### Oracle Cloud VMs
-Additionally the configuration is supported by 2 additional cloud instances to ensure Zero Trust to most services.
+Additionally the configuration is supported by 2 additional cloud instances to ensure Zero Trust to the on-prem services.
 
-- Instance 1: 2 Cores 16GB RAM (VM.Standard.A1.Flex (Altra processor from Ampere))
-- Instance 2: 2 Cores 8GB RAM (VM.Standard.A1.Flex (Altra processor from Ampere))
+- **Instance 1**: 2 Cores + 16GB RAM ([VM.Standard.A1.Flex](https://cloud.oracle.com) (Altra processor from Ampere)) running ubuntu server
+- **Instance 2**: 2 Cores + 8GB RAM ([VM.Standard.A1.Flex](https://cloud.oracle.com) (Altra processor from Ampere)) running ubuntu server
 
 
 ##
@@ -127,10 +127,12 @@ Additionally the configuration is supported by 2 additional cloud instances to e
    - [PiVPN](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/docs/installation/raspberry-pi-services.md#pivpn) - Wireguard VPN
    - [SearXNG](#searxng) - Metasearch Engine - used as public search engine
    - [Pangolin](https://pangolin.net/) - Identity-based remote access platform built on WireGuard that enables secure, seamless connectivity to private and public resources
+   - [CrowdSec](https://www.crowdsec.net/) - Crowdsourced server detection and protection against malicious IPs
 
 9. [Bonus Information](#bonus-information)
    - [Backups scripts](#backup-scripts)
    - [Windows Tips & Tricks](#windows-tips-&-tricks)
+
 ## Architecture diagram
 
 High level architecture:
