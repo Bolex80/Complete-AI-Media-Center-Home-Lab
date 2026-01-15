@@ -53,20 +53,12 @@ The configuaration might seem completly overhead and might look messy. But after
 - The network equipment (Routers,  Raspberry Pis, Swith, KVM and external HD) consume an average of 50-60W.
 - Main server in Idle 150-160 W. If I start using the GPU, it will rasise to 350 W aprox.
 
-## Cloud Instances (Oracle Cloud)
-### Main Cloud VM 
-2 Cores 16GB RAM (VM.Standard.A1.Flex (Altra processor from Ampere))
-Running the following services:
-- Wireguard
-- Stirling PDF
-- Pi-Hole
-- SearXNG
+### Oracle Cloud VMs
+Additionally the configuration is supported by 2 additional cloud instances to ensure Zero Trust to most services.
 
-### Secondary Cloud VM 
-2 Cores 8GB RAM (VM.Standard.A1.Flex (Altra processor from Ampere))
-Running the following services:
-- Panglolin
-- Crowdsec
+- Instance 1: 2 Cores 16GB RAM (VM.Standard.A1.Flex (Altra processor from Ampere))
+- Instance 2: 2 Cores 8GB RAM (VM.Standard.A1.Flex (Altra processor from Ampere))
+
 
 ##
 
@@ -130,7 +122,13 @@ Running the following services:
    - [Redis DB](#redis-db) - Scalable Data Base (Some services use it)
    - [Watchtower](#watchtower) - Automated Docker container updates (All Servers)
 
-8. [Bonus Information](#bonus-information)
+8.  [Oracle Cloud Services ](#cloud-services) - These are complementary servers for implementing Zero Trust Security
+   - [Pi-Hole](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/docs/installation/raspberry-pi-services.md#pi-hole) - Adblocker - DNS Provider and DHCP Server
+   - [PiVPN](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/docs/installation/raspberry-pi-services.md#pivpn) - Wireguard VPN
+   - [SearXNG](#searxng) - Metasearch Engine - used as public search engine
+   - [Pangolin](https://pangolin.net/) - Identity-based remote access platform built on WireGuard that enables secure, seamless connectivity to private and public resources
+
+9. [Bonus Information](#bonus-information)
    - [Backups scripts](#backup-scripts)
    - [Windows Tips & Tricks](#windows-tips-&-tricks)
 ## Architecture diagram
