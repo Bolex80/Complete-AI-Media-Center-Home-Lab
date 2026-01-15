@@ -54,7 +54,7 @@ The configuaration might seem completly overhead and might look messy. But after
 - Main server in Idle 150-160 W. If I start using the GPU, it will rasise to 350 W aprox.
 
 ### Oracle Cloud VMs
-Additionally the configuration is supported by 2 additional cloud instances to ensure Zero Trust to the on-prem services.
+The configuration is supported by 2 additional cloud instances to ensure Zero Trust to the on-prem services.
 
 - **Instance 1**: 2 Cores + 16GB RAM ([VM.Standard.A1.Flex](https://cloud.oracle.com) (Altra processor from Ampere)) running ubuntu server
 - **Instance 2**: 2 Cores + 8GB RAM ([VM.Standard.A1.Flex](https://cloud.oracle.com) (Altra processor from Ampere)) running ubuntu server
