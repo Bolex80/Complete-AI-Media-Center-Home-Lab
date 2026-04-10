@@ -1,0 +1,36 @@
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    networks:
+      - default
+    restart: unless-stopped
+    container_name: open-webui
+    ports:
+      - "4000:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - OPENAI_API_BASE_URL=http://litellm:4000/v1
+      - OPENAI_API_KEY=YOUR_OPENAI_API_KEY_HERE
+      # TTS Configuration
+      - AUDIO_TTS_ENGINE=openai
+      - AUDIO_TTS_API_KEY=${TTS_API_KEY:-your_api_key_here}
+      - AUDIO_TTS_OPENAI_API_BASE_URL=http://openai-edge-tts:5050/v1
+      # Tika Configuration
+      - TIKA_SERVER_URL=http://tika:9998
+      # SSO configuration
+      - WEBUI_AUTH_TRUSTED_EMAIL_HEADER=Remote-Email
+      - WEBUI_AUTH_TRUSTED_NAME_HEADER=Remote-Name
+      - ENABLE_SIGNUP=false
+      - DEFAULT_USER_ROLE=user
+    volumes:
+      - ./open-webui-data:/app/backend/data
+
+networks:
+  default:
+    name: bolex-net
+    external: true
+volumes:
+  open-webui-data:
+    name: open-webui-data
