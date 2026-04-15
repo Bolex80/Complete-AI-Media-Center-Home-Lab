@@ -109,11 +109,12 @@ All WSL2 compose files have been sanitized:
 
 ### 1. Docker Compose Files Required
 
-**Raspberry Pi (4 needed):**
-1. nginx-proxy-manager
-2. searxng
-3. vaultwarden
-4. homer-dashboard
+**Raspberry Pi (4 → 4 new + 1 additional service):**
+- ✅ nginx-proxy-manager
+- ✅ searxng (with Valkey for caching)
+- ✅ vaultwarden
+- ✅ homer-dashboard
+- ✅ watchyourlan (new — wasn't in original plan)
 
 **Ubuntu Server 1 (10 needed, guacamole NOT deployed):**
 - ✅ nginx-proxy-manager
@@ -183,6 +184,8 @@ When creating new compose files, reference existing ones:
 
 **Ubuntu Server 1 location:** `/home/alex/Complete-AI-Media-Center-Home-Lab/docs/docker-compose/ubuntu-server-1/`
 
+**Ubuntu Server 1 location:** `/home/alex/Complete-AI-Media-Center-Home-Lab/docs/docker-compose/ubuntu-server-1/`
+
 **Ubuntu Server 2 location:** `/home/alex/Complete-AI-Media-Center-Home-Lab/docs/docker-compose/ubuntu-server-2/`
 
 **Oracle Cloud location:** `/home/alex/Complete-AI-Media-Center-Home-Lab/docs/docker-compose/oracle-cloud/`
@@ -194,7 +197,7 @@ When creating new compose files, reference existing ones:
 ## Completion Checklist
 
 ### Phase 1: Docker Compose Files
-- [x] Raspberry Pi services (3 existing + review pending)
+- [x] Raspberry Pi services (3 existing + 5 new: NPM, SearXNG, Vaultwarden, Homer, WatchYourLAN)
 - [x] Ubuntu Server 1 services (10 of 10 — guacamole removed, not deployed)
 - [ ] Ubuntu Server 2 services (3)
 - [ ] Oracle Cloud services (2 reference docs)
@@ -203,6 +206,8 @@ When creating new compose files, reference existing ones:
 - [x] Update ubuntu-server-1-services.md (ports corrected, services expanded, undocumented services listed)
 - [x] Remove real passwords from high-availability.md (replaced with env var references)
 - [x] Add secrets.example.env template for Ubuntu Server 1
+- [x] Rewrite raspberry-pi-services.md (complete with Docker services, bare-metal services, port reference)
+- [x] Add secrets.example.env template for Raspberry Pi
 - [ ] Update ubuntu-server-2-services.md (Nextcloud AIO rewrite needed)
 - [ ] Update raspberry-pi-services.md with Docker section
 - [ ] Update main README.md with navigation
@@ -218,9 +223,9 @@ When creating new compose files, reference existing ones:
 
 ## Current File Count
 
-- **Docker Compose files:** 25 (14 existing + 11 new for Ubuntu Server 1)
-- **Markdown guides:** 6 (ubuntu-server-1-services.md rewritten)
-- **Security:** Real Keepalived passwords removed from docs, secrets.example.env created
-- **Lines of documentation:** ~3000+
+- **Docker Compose files:** 30 (14 original + 11 Ubuntu Server 1 + 5 Raspberry Pi)
+- **Markdown guides:** 7 (ubuntu-server-1-services.md rewritten, raspberry-pi-services.md rewritten)
+- **Security:** Real Keepalived passwords removed from docs, secrets.example.env for both servers
+- **Lines of documentation:** ~4000+
 
-**Repository Status:** ~75% Complete
+**Repository Status:** ~82% Complete

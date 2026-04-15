@@ -1,0 +1,37 @@
+services:
+  wyl:
+    image: aceberg/watchyourlan:latest
+    container_name: watchyourlan-wyl-1
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./data:/data/WatchYourLAN
+    environment:
+      - THEME=sand
+      - COLOR=dark
+      - TZ=Europe/Madrid
+      - IFACES=eth0                      # Change to match your network interface
+      - HOST=192.168.2.200              # Change for PiNet2
+      - PORT=8840
+      - TIMEOUT=120
+
+  forauth:
+    image: aceberg/forauth:latest
+    container_name: watchyourlan-forauth-1
+    restart: unless-stopped
+    ports:
+      - "8800:8800"
+      - "8801:8801"
+    volumes:
+      - ./forauth:/data/ForAuth
+    environment:
+      - TZ=Europe/Madrid
+      - FA_TARGET=192.168.2.200:8840    # Change for PiNet2
+      - FA_AUTH=true
+      - FA_AUTH_EXPIRE=7d
+      - FA_AUTH_USER=YOUR_USERNAME        # CHANGE ME
+    networks:
+      - watchyourlan_default
+
+networks:
+  watchyourlan_default:

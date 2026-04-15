@@ -21,5 +21,6 @@ services:
     # Another protection to restrict superuser privileges (optional but recommended)
     environment:
       - CF_API_TOKEN=<token-goes-here> # Your Cloudflare API token
-      - DOMAINS=domain1.com,domain2.org,domain3.edu # Your domains (separated by commas)
+      - DOMAINS=your-domain.com,your-other-domain.com
+        # PiNet1 uses: bentomo.es,bolex.es
       - PROXIED=false # Tell Cloudflare to cache webpages and hide your IP (optional)

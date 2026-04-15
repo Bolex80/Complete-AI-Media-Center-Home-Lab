@@ -1,0 +1,17 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    ports:
+      - "8100:80"
+    volumes:
+      - ./data:/data
+    environment:
+      - DOMAIN=https://pass.benthem.es
+      # - ADMIN_TOKEN=YOUR_ADMIN_TOKEN          # Uncomment for admin panel
+      # - SIGNUPS_ALLOWED=false                 # Disable public signups
+      # - PUSH_ENABLED=true                      # Uncomment to enable push notifications
+      # - PUSH_RELAY_URI=https://api.bitwarden.eu
+      # - PUSH_IDENTITY_URI=https://identity.bitwarden.eu
+      # - PUSH_INSTALLATION_ID=YOUR_ID          # Get from bitwarden.com/host
