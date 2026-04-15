@@ -1,0 +1,16 @@
+services:
+  homer:
+    image: b4bz/homer:latest
+    container_name: homer
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./assets:/www/assets
+    environment:
+      - UID=1000
+      - GID=1000
+      - PORT=8080
+      - SUBFOLDER=/_
+      - INIT_ASSETS=1
+      - IPV6_DISABLE=0

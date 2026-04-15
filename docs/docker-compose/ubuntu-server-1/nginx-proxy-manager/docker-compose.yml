@@ -1,0 +1,32 @@
+services:
+  app:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: nginx-app-1
+    restart: unless-stopped
+    ports:
+      - "80:80"      # HTTP
+      - "81:81"       # Admin UI
+      - "443:443"     # HTTPS
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    networks:
+      - nginx_default
+
+  db:
+    image: jc21/mariadb-aria:latest
+    container_name: nginx-db-1
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "npm"          # CHANGE ME — use .env for production
+      MYSQL_DATABASE: "npm"
+      MYSQL_USER: "npm"
+      MYSQL_PASSWORD: "npm"              # CHANGE ME — use .env for production
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - nginx_default
+
+networks:
+  nginx_default:
+    external: true

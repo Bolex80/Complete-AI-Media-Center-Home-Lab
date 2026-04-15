@@ -115,18 +115,18 @@ All WSL2 compose files have been sanitized:
 3. vaultwarden
 4. homer-dashboard
 
-**Ubuntu Server 1 (11 needed):**
-1. nginx-proxy-manager
-2. homer-dashboard
-3. searxng
-4. vaultwarden
-5. pihole (secondary)
-6. beszel
-7. speedtest-tracker
-8. cloudflare-ddns
-9. it-tools
-10. themepark
-11. guacamole
+**Ubuntu Server 1 (10 needed, guacamole NOT deployed):**
+- ✅ nginx-proxy-manager
+- ✅ homer-dashboard
+- ✅ searxng
+- ✅ vaultwarden
+- ✅ pihole (secondary, with Unbound)
+- ✅ beszel
+- ✅ speedtest-tracker
+- ✅ cloudflare-ddns
+- ✅ it-tools
+- ✅ themepark
+- ❌ guacamole (NOT deployed — removed from plan)
 
 **Ubuntu Server 2 (3 needed):**
 1. nextcloud
@@ -194,18 +194,22 @@ When creating new compose files, reference existing ones:
 ## Completion Checklist
 
 ### Phase 1: Docker Compose Files
-- [ ] Raspberry Pi services (4)
-- [ ] Ubuntu Server 1 services (11)
+- [x] Raspberry Pi services (3 existing + review pending)
+- [x] Ubuntu Server 1 services (10 of 10 — guacamole removed, not deployed)
 - [ ] Ubuntu Server 2 services (3)
 - [ ] Oracle Cloud services (2 reference docs)
 
 ### Phase 2: Documentation
+- [x] Update ubuntu-server-1-services.md (ports corrected, services expanded, undocumented services listed)
+- [x] Remove real passwords from high-availability.md (replaced with env var references)
+- [x] Add secrets.example.env template for Ubuntu Server 1
+- [ ] Update ubuntu-server-2-services.md (Nextcloud AIO rewrite needed)
 - [ ] Update raspberry-pi-services.md with Docker section
 - [ ] Update main README.md with navigation
 - [ ] Review all installation guides for consistency
 
 ### Phase 3: Review & Polish
-- [ ] Verify all compose files are sanitized
+- [x] Verify all compose files are sanitized (no real passwords/secrets)
 - [ ] Check for consistent formatting
 - [ ] Add badges/graphics to README
 - [ ] Test internal links
@@ -214,9 +218,9 @@ When creating new compose files, reference existing ones:
 
 ## Current File Count
 
-- **Docker Compose files:** 14
-- **Markdown guides:** 6
-- **Total new files created:** 20+
-- **Lines of documentation:** ~2000+
+- **Docker Compose files:** 25 (14 existing + 11 new for Ubuntu Server 1)
+- **Markdown guides:** 6 (ubuntu-server-1-services.md rewritten)
+- **Security:** Real Keepalived passwords removed from docs, secrets.example.env created
+- **Lines of documentation:** ~3000+
 
-**Repository Status:** ~60% Complete
+**Repository Status:** ~75% Complete

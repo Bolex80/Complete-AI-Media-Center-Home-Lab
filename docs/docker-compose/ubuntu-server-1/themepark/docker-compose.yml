@@ -1,0 +1,15 @@
+services:
+  theme-park:
+    image: ghcr.io/themepark-dev/theme.park:latest
+    container_name: theme-park
+    restart: unless-stopped
+    ports:
+      - "8082:80"       # HTTP
+      - "4443:443"      # HTTPS
+    volumes:
+      - ./data:/config
+    environment:
+      - TZ=Europe/Madrid
+      - TP_URLBASE=themepark
+      - PUID=1000
+      - PGID=1000

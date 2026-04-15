@@ -78,7 +78,7 @@ vrrp_instance HTTP {
   }
   authentication {
     auth_type PASS
-    auth_pass Lw7Oo8PQ            # 8-char password for HTTP group
+    auth_pass ${KEEPALIVED_AUTH_HTTP}     # See secrets.example.env
   }
   virtual_ipaddress {
     192.168.2.3/24
@@ -110,7 +110,7 @@ vrrp_instance HTTP {
   }
   authentication {
     auth_type PASS
-    auth_pass Lw7Oo8PQ            # Same as HTTP master
+    auth_pass ${KEEPALIVED_AUTH_HTTP}     # See secrets.example.env
   }
   virtual_ipaddress {
     192.168.2.3/24
@@ -129,7 +129,7 @@ vrrp_instance VPN-DNS {
   }
   authentication {
     auth_type PASS
-    auth_pass 7xvzUPLR             # 8-char password for VPN group
+    auth_pass ${KEEPALIVED_AUTH_VPN_DNS}  # See secrets.example.env
   }
   virtual_ipaddress {
     192.168.2.4/24
@@ -164,7 +164,7 @@ vrrp_instance VPN-DNS {
 
   authentication {
     auth_type PASS
-    auth_pass 7xvzUPLR             # Same as VPN master
+    auth_pass ${KEEPALIVED_AUTH_VPN_DNS}  # See secrets.example.env
   }
   virtual_ipaddress {
     192.168.2.4/24
@@ -178,8 +178,7 @@ vrrp_instance VPN-DNS {
 ### **Key Configuration Notes**
 
 1. **Interface:** Replace `eth0` with the actual network interface name (e.g., `ens192`).
-2. **Authentication:**
-    - Use unique passwords per VRRP group (HTTP: `MyPass123`, VPN: `MyPass456`).
+> ⚠️ **Security:** Keepalived auth passwords should be stored in a `.env` file (see `secrets.example.env`) and never committed to version control. The variables `KEEPALIVED_AUTH_HTTP` and `KEEPALIVED_AUTH_VPN_DNS` are referenced in the configs below.
 3. **Virtual Router IDs:**
     - `virtual_router_id` must match across instances in the same group (51 for HTTP, 52 for VPN).
 4. **Priority Hierarchy:**

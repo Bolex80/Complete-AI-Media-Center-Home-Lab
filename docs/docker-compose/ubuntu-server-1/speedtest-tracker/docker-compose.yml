@@ -1,0 +1,19 @@
+services:
+  speedtest-tracker:
+    image: lscr.io/linuxserver/speedtest-tracker:latest
+    container_name: speedtest-tracker
+    restart: unless-stopped
+    ports:
+      - "8085:80"       # HTTP Web UI
+      - "8443:443"      # HTTPS Web UI
+    volumes:
+      - ./data:/config
+      - ./keys:/config/keys
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+      - DB_CONNECTION=sqlite
+      - DISPLAY_TIMEZONE=Europe/Madrid
+      - APP_TIMEZONE="Europe/Madrid"
+      - SPEEDTEST_SCHEDULE=0 * * * *    # Every hour
