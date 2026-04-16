@@ -1,0 +1,41 @@
+# Stirling PDF — Self-hosted PDF manipulation tool
+# "Benthem PDF" — custom branded instance
+
+services:
+  stirling-pdf:
+    image: stirlingtools/stirling-pdf:latest-fat
+    container_name: stirling-pdf
+    restart: unless-stopped
+    ports:
+      - "8090:8080"
+    volumes:
+      - ./trainingData:/usr/share/tessdata
+      - ./extraConfigs:/configs
+      - ./customFiles:/customFiles
+      - ./logs:/logs
+      - ./pipeline:/pipeline
+      - ./temp:/tmp/stirling-pdf
+    environment:
+      # UI Customization
+      - UI_APPNAME=Benthem PDF
+      - UI_APPNAVBARNAME=Benthem PDF
+      - UI_HOMEDESCRIPTION=Your locally hosted one-stop-shop for all your PDF needs.
+      - SYSTEM_GOOGLEVISIBILITY=false
+      - SYSTEM_DEFAULTLOCALE=es_ES
+      # Security
+      - SECURITY_ENABLELOGIN=false
+      - SECURITY_CSRFDISABLED=true
+      # Performance
+      - JAVA_TOOL_OPTIONS=-Xms2g -Xmx10g -XX:+UseG1GC -XX:MaxRAMPercentage=75
+      # System
+      - SYSTEM_MAXFILESIZE=2000
+      - SYSTEM_CONNECTIONTIMEOUTMINUTES=10
+      - SYSTEM_TEMPFILEMAXAGE=24
+      - SYSTEM_TEMPFILECLEANUP=true
+      - INSTALL_BOOK_AND_ADVANCED_HTML_OPS=true
+      # Email (optional)
+      # - MAIL_ENABLED=true
+      # - MAIL_USERNAME=pdf@benthem.es
+      # - MAIL_FROM=pdf@benthem.es
+      # - MAIL_PORT=587
+      # - MAIL_TLS_ENABLED=true

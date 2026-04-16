@@ -1,0 +1,18 @@
+# Benthem Website — Family history static site
+# Next.js 16 with `output: 'export'` → nginx serves static files
+
+services:
+  benthem-website:
+    image: nginx:alpine
+    container_name: benthem-website
+    restart: unless-stopped
+    ports:
+      - "8880:80"
+    volumes:
+      - ./html-export:/usr/share/nginx/html:ro
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+# Build pipeline (separate, not in this compose):
+# The benthem-website project uses a builder container that runs
+# `npm run build` and outputs static files to html-export/.
+# A separate nginx container (this one) serves the output.

@@ -1,0 +1,51 @@
+# LinkStack — Self-hosted link page (link-in-bio style)
+# Two instances: Alex's links and Hugo's links
+
+services:
+  # Alex's link page
+  linkstack:
+    image: linkstackorg/linkstack:latest
+    container_name: linkstack-linkstack-1
+    restart: unless-stopped
+    ports:
+      - "8190:443"
+    volumes:
+      - linkstack_data:/htdocs
+    environment:
+      - TZ=Europe/Madrid
+      - HTTP_SERVER_NAME=alex.benthem.es
+      - HTTPS_SERVER_NAME=alex.benthem.es
+      - LOG_LEVEL=info
+      - PHP_MEMORY_LIMIT=256M
+      - UPLOAD_MAX_FILESIZE=8M
+    networks:
+      - linkstack
+
+  # Hugo's link page
+  linkstack-hugo:
+    image: linkstackorg/linkstack:latest
+    container_name: linkstack-hugo-linkstack-1
+    restart: unless-stopped
+    ports:
+      - "8191:443"
+    volumes:
+      - linkstack-hugo_data:/htdocs
+    environment:
+      - TZ=Europe/Madrid
+      - HTTP_SERVER_NAME=hugo.benthem.es
+      - HTTPS_SERVER_NAME=hugo.benthem.es
+      - LOG_LEVEL=info
+      - PHP_MEMORY_LIMIT=256M
+      - UPLOAD_MAX_FILESIZE=8M
+    networks:
+      - linkstack
+
+networks:
+  linkstack:
+    name: linkstack_default
+
+volumes:
+  linkstack_data:
+    name: linkstack_linkstack_data
+  linkstack-hugo_data:
+    name: linkstack-hugo_linkstack_data

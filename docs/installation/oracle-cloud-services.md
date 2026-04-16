@@ -1,326 +1,157 @@
 # Oracle Cloud Services
 
-These services run on Oracle Cloud Infrastructure (OCI) free tier instances to provide Zero Trust security and offsite redundancy.
-
-## Infrastructure
-
-### Instance 1
-- **Type:** VM.Standard.A1.Flex (Ampere Altra processor)
-- **Specs:** 2 Cores, 16GB RAM
-- **OS:** Ubuntu Server
-- **Purpose:** Primary cloud services
-
-### Instance 2
-- **Type:** VM.Standard.A1.Flex (Ampere Altra processor)
-- **Specs:** 2 Cores, 8GB RAM
-- **OS:** Ubuntu Server
-- **Purpose:** Secondary/backup services
-
-## Network Architecture
-
-The Oracle Cloud instances provide:
-1. **Zero Trust Access**: Services not directly exposed to internet
-2. **Pangolin Tunnel**: Secure WireGuard-based access to home services
-3. **CrowdSec Monitoring**: Collective security intelligence
-4. **Public DNS**: PiHole accessible from anywhere via Pangolin
-
-## Services Overview
-
-### Pi-Hole (Cloud)
-**Description:** DNS sinkhole and ad blocker.
-**Purpose:** Ad blocking and DNS resolution when away from home.
-**Port:** 53 (DNS)
-**Configuration:** See [Raspberry Pi PiHole guide](../raspberry-pi-services.md#pi-hole)
-
-**Key Differences from On-Prem:**
-- Configured for public access through Pangolin
-- Restricted query logging for privacy
-- Synced blocklists with home instances
+Two Oracle Cloud ARM64 (aarch64) VPS instances providing public-facing infrastructure.
 
 ---
 
-### PiVPN (Cloud)
-**Description:** WireGuard VPN server.
-**Purpose:** Secure connection to home network when traveling.
-**Port:** 51820/UDP
-**Configuration:** See [Raspberry Pi PiVPN guide](../raspberry-pi-services.md#pivpn)
+## Bolex-Cloud-1 — 79.72.49.182
 
-**Key Features:**
-- Split tunneling available
-- QR code generation for mobile clients
-- Pre-shared key support
-- Client management via CLI
+**Purpose:** Web project hosting + infrastructure services
+**Architecture:** ARM64 (aarch64)
+**OS:** Ubuntu
+**RAM:** 15 GB
+**User:** alex
 
----
+### Services Overview
 
-### SearXNG (Cloud)
-**Description:** Public metasearch engine instance.
-**Purpose:** Search without tracking from any device.
-**Port:** 8080 (internal)
-**Configuration:** [docker-compose.yml](../docker-compose/searxng/docker-compose.yml)
+| # | Service | Port | Domain | Compose |
+|---|---------|------|--------|---------|
+| 1 | Nginx Proxy Manager | 80/81/443 | nginx.benthem.es (admin) | Local only |
+| 2 | Benthem Website | 8880 | benthem.es, www.benthem.es | [Link](../docker-compose/bolex-cloud-1/benthem-website/docker-compose.yml) |
+| 3 | Gastos Bentomo | 8885 | gastos.bentomo.es | [Link](../docker-compose/bolex-cloud-1/gastos-bentomo/docker-compose.yml) |
+| 4 | Sonemos Juntos | 8888 | soñemosjuntos.com, sonemosjuntos.es | [Link](../docker-compose/bolex-cloud-1/sonemosjuntos/docker-compose.yml) |
+| 5 | Husoma Web | 8882 | husoma.com, www.husoma.com | [Link](../docker-compose/bolex-cloud-1/husoma-web/docker-compose.yml) |
+| 6 | Stirling PDF | 8090 | — | [Link](../docker-compose/bolex-cloud-1/stirling-pdf/docker-compose.yml) |
+| 7 | Koffan | 3000 | crowdsec.bentomo.es | [Link](../docker-compose/bolex-cloud-1/koffan/docker-compose.yml) |
+| 8 | GoAccess | 7880 | go.benthem.es | [Link](../docker-compose/bolex-cloud-1/goaccess/docker-compose.yml) |
+| 9 | SearXNG | 8070 | — | Local only |
 
-**Public Access:**
-- Exposed via Pangolin with domain authentication
-- Rate limited for abuse prevention
-- No persistent search history
+### Infrastructure Agents
 
----
+| Service | Port | Notes |
+|---------|------|-------|
+| Newt | 2112 | Pangolin tunnel agent |
+| Hawser | 2376 | Docker TLS proxy → Dockhand on Nextcloud server |
+| Valkey | 6379 | Redis-compatible cache for gastos/SearXNG |
 
-### Pangolin
-**Description:** Identity-based remote access platform.
-**Purpose:** Secure, seamless connectivity to private resources without VPN.
-**Website:** https://pangolin.net/
+### Reverse Proxy Architecture
 
-**Key Features:**
-- Built on WireGuard
-- Identity-based access control
-- No port forwarding required
-- Audit logging
-- Supports multiple resource types (HTTP, TCP, UDP)
+All 4 web projects route through **Pangolin** on Bolex-Cloud-2 (Zero Trust reverse proxy):
 
-**Architecture:**
 ```
-[User] --> [Pangolin Server (Oracle Cloud)] --> [Pangolin Client (Home)] --> [Internal Services]
+Internet → Pangolin (Bolex-Cloud-2) → Gerbil → Traefik
+  → benthem.es      → Bolex-Cloud-1:8880
+  → gastos.bentomo.es → Bolex-Cloud-1:8885
+  → sonemosjuntos.es  → Bolex-Cloud-1:8888
+  → husoma.com       → Bolex-Cloud-1:8882
 ```
 
-**Configuration:**
-1. Install Pangolin server on Oracle Cloud
-2. Install Pangolin client on home network (behind firewall)
-3. Configure resources in Pangolin dashboard
-4. Share access with users via identity provider
+NPM on Bolex-Cloud-1 handles local SSL termination and some direct routes (GoAccess, CrowdSec UI).
+
+### Service Details
+
+**Stirling PDF ("Benthem PDF"):**
+Custom-branded PDF tool with Spanish locale, no login required. Uses `stirling-pdf:latest-fat` for full feature set (LibreOffice, OCR). Java heap: 2GB-10GB.
+
+**Koffan:**
+Shopping list app with CrowdSec integration. Auth disabled by default (`DISABLE_AUTH=true`).
+
+**GoAccess:**
+Real-time log analytics paired with NPM. Reads NPM proxy logs for traffic visualization.
 
 ---
 
-### CrowdSec
-**Description:** Crowdsourced intrusion prevention system.
-**Purpose:** Detect and block malicious IPs across all infrastructure.
-**Website:** https://www.crowdsec.net/
+## Bolex-Cloud-2 — 130.110.233.63
 
-**Key Features:**
-- Real-time threat detection
-- Community-based intelligence
-- Multi-server synchronization
-- Automatic remediation (ban actions)
-- Works with firewalls and reverse proxies
+**Purpose:** Zero Trust reverse proxy + security monitoring
+**Architecture:** ARM64 (aarch64)
+**OS:** Ubuntu
+**User:** alex
 
-**Architecture:**
+### Services Overview
+
+| # | Service | Port | Compose |
+|---|---------|------|---------|
+| 1 | Pangolin | — | [Link](../docker-compose/oracle-cloud/pangolin/docker-compose.yml) |
+| 2 | Gerbil (Pangolin tunnel) | 80/443/6060/8080/51820/21820/25565/19132 | Included in Pangolin compose |
+| 3 | Traefik | — | [Link](../docker-compose/oracle-cloud/traefik/docker-compose.yml) |
+| 4 | CrowdSec | — | [Link](../docker-compose/oracle-cloud/crowdsec/docker-compose.yml) |
+| 5 | GeoIP Update | — | Managed by Pangolin config |
+
+### Infrastructure
+
+| Service | Port | Notes |
+|---------|------|-------|
+| Hawser | 2376 | Docker TLS proxy → Dockhand |
+
+### Reverse Proxy Chain
+
 ```
-[All Servers] --> [Local API] --> [Central API] --> [CrowdSec Community]
+Client Request
+    ↓
+Pangolin (Zero Trust Auth + Route Matching)
+    ↓
+Gerbil (WireGuard Tunnel + Port Exposure)
+    ↓
+Traefik (TLS Termination + HTTP Routing)
+    ↓
+Upstream Service (on Bolex-Cloud-1)
 ```
 
-**Setup Overview:**
-1. Install CrowdSec agent on each server
-2. Configure parsers and scenarios
-3. Connect to local API (on Oracle Cloud)
-4. Share signals with CrowdSec community
-5. Configure remediation (firewall, Nginx bouncer, etc.)
+**Pangolin** handles:
+- Zero Trust authentication
+- Route matching (domain → upstream)
+- WireGuard tunnel management
+
+**Gerbil** handles:
+- Port exposure (80, 443, 51820/udp for WireGuard)
+- Tunnel relaying
+
+**Traefik** handles:
+- TLS termination with Let's Encrypt
+- HTTP routing to backends
+- Access logging (fed to CrowdSec)
+
+**CrowdSec** handles:
+- Log analysis from Traefik
+- Threat intelligence sharing
+- `crowdsecurity/traefik` collection
+
+**GeoIP Update:**
+Downloads MaxMind GeoLite2 databases (Country + ASN) every 72 hours for Traefik geolocation.
 
 ---
 
-## Security Configuration
-
-### Firewall Rules (Oracle Cloud Security Lists)
-
-**Ingress:**
-- 22/TCP (SSH) - Restricted to your IP
-- 80/TCP (HTTP) - For Let's Encrypt/redirects
-- 443/TCP (HTTPS) - For Pangolin/web services
-- 51820/UDP (WireGuard) - For PiVPN
-
-**Egress:**
-- Allow all (for updates, API calls, etc.)
-
-### SSH Hardening
+## SSH Access
 
 ```bash
-# Edit /etc/ssh/sshd_config
-PermitRootLogin no
-PasswordAuthentication no
-PubkeyAuthentication yes
-MaxAuthTries 3
-ClientAliveInterval 300
-ClientAliveCountMax 2
+# Bolex-Cloud-1
+ssh -i ~/.ssh/Bolex-Cloud-1-Private-2025-12-09.key alex@79.72.49.182
 
-# Restart SSH
-sudo systemctl restart sshd
-```
-
-### Fail2Ban
-
-```bash
-sudo apt install fail2ban
-sudo systemctl enable fail2ban
-
-# Configure /etc/fail2ban/jail.local
-[sshd]
-enabled = true
-port = ssh
-filter = sshd
-logpath = /var/log/auth.log
-maxretry = 3
-bantime = 3600
+# Bolex-Cloud-2
+ssh -i ~/.ssh/Bolex-Cloud-2-Private.key alex@130.110.233.63
 ```
 
 ---
 
-## Deployment Guide
+## Common Configuration
 
-### Initial Server Setup
+### Starting Services
 
+**Bolex-Cloud-1:**
 ```bash
-# Update system
-sudo apt update && sudo apt upgrade -y
-
-# Install Docker
-sudo apt install -y docker.io docker-compose-plugin
-sudo systemctl enable docker
-sudo usermod -aG docker $USER
-
-# Create shared network
-docker network create bolex-net
-
-# Configure firewall
-sudo ufw allow 22/tcp
-sudo ufw allow 80/tcp
-sudo ufw allow 443/tcp
-sudo ufw allow 51820/udp
-sudo ufw enable
+cd ~/Complete-AI-Media-Center-Home-Lab/docs/docker-compose/bolex-cloud-1
+for dir in */; do
+  (cd "$dir" && docker compose up -d)
+done
 ```
 
-### Pangolin Installation
-
+**Bolex-Cloud-2:**
 ```bash
-# Download and install Pangolin
-wget https://github.com/fosrl/pangolin/releases/latest/download/pangolin-linux-amd64
-sudo mv pangolin-linux-amd64 /usr/local/bin/pangolin
-sudo chmod +x /usr/local/bin/pangolin
-
-# Generate config
-sudo pangolin config generate
-
-# Edit configuration
-sudo nano /etc/pangolin/config.yml
-
-# Start Pangolin
-sudo systemctl enable pangolin
-sudo systemctl start pangolin
+cd ~/Complete-AI-Media-Center-Home-Lab/docs/docker-compose/oracle-cloud
+# Start Pangolin first (includes Gerbil)
+docker compose -f pangolin/docker-compose.yml up -d
+# Then Traefik and CrowdSec
+docker compose -f traefik/docker-compose.yml up -d
+docker compose -f crowdsec/docker-compose.yml up -d
 ```
-
-### CrowdSec Installation
-
-```bash
-# Install CrowdSec
-curl -s https://packagecloud.io/install/repositories/crowdsec/crowdsec/script.deb.sh | sudo bash
-sudo apt install -y crowdsec
-
-# Install bouncers
-sudo apt install -y crowdsec-firewall-bouncer-iptables
-
-# Register to Central API
-sudo cscli console enroll YOUR_ENROLLMENT_KEY
-
-# Start CrowdSec
-sudo systemctl enable crowdsec
-sudo systemctl start crowdsec
-```
-
----
-
-## High Availability
-
-### Synchronization Strategy
-
-**PiHole:**
-- Use Gravity Sync to sync between Oracle Cloud and home instances
-- Configured as secondary/tertiary DNS
-
-**CrowdSec:**
-- Multi-server setup with centralized local API
-- Decisions propagated across all agents
-
-### Backup Considerations
-
-**Critical Data:**
-- Pangolin configuration
-- CrowdSec decisions and configurations
-- PiHole custom blocklists and local DNS
-- PiVPN client configurations
-
-**Backup Script:**
-```bash
-#!/bin/bash
-BACKUP_DIR="/backups/oracle-cloud/$(date +%Y%m%d)"
-mkdir -p "$BACKUP_DIR"
-
-# Backup Pangolin config
-tar czf "$BACKUP_DIR/pangolin.tar.gz" /etc/pangolin
-
-# Backup CrowdSec
-cscli backup "$BACKUP_DIR/crowdsec-backup.tar.gz"
-
-# Backup PiHole (if running)
-docker exec pihole pihole -a -t > "$BACKUP_DIR/pihole-backup.tar.gz"
-```
-
----
-
-## Monitoring
-
-### Uptime Kuma (Optional)
-
-Monitor Oracle Cloud instances from home:
-
-```yaml
-# Add to home Uptime Kuma
-monitors:
-  - name: "Oracle Cloud Instance 1"
-    type: ping
-    hostname: "oracle-instance-1-ip"
-  - name: "Oracle Cloud Instance 2"
-    type: ping
-    hostname: "oracle-instance-2-ip"
-  - name: "Pangolin"
-    type: http
-    url: "https://pangolin.yourdomain.com"
-```
-
----
-
-## Troubleshooting
-
-### Pangolin Connection Issues
-
-1. Verify WireGuard kernel module: `sudo modprobe wireguard`
-2. Check Pangolin logs: `sudo journalctl -u pangolin -f`
-3. Verify firewall rules allow traffic
-4. Check resource access policies
-
-### CrowdSec False Positives
-
-1. Check decisions: `sudo cscli decisions list`
-2. Add whitelists for trusted IPs
-3. Review acquisition configuration
-4. Disable specific scenarios if needed
-
-### High Memory Usage
-
-Oracle Cloud free tier has limited resources:
-1. Monitor with `htop` or `free -h`
-2. Adjust service limits
-3. Consider swapping to disk if needed
-4. Scale down to fewer services per instance
-
----
-
-## Cost Considerations
-
-Oracle Cloud free tier includes:
-- 2 AMD-based Compute VMs (1/8 OCPU, 1 GB RAM each)
-- 4 ARM-based Ampere A1 cores and 24 GB of memory
-- 200 GB block storage
-
-**Tips:**
-- Use ARM instances for better resource allocation
-- Monitor always-free resource usage
-- Set up billing alerts
-- Consider reserved capacity if upgrading

@@ -1,0 +1,15 @@
+# CrowdSec: Collaborative intrusion detection
+# Monitors Traefik logs and shares threat intelligence
+
+services:
+  crowdsec:
+    image: crowdsecurity/crowdsec:latest
+    container_name: crowdsec
+    restart: unless-stopped
+    volumes:
+      - ./crowdsec:/etc/crowdsec
+      - ./crowdsec/acquis.d:/etc/crowdsec/acquis.d
+      - ./crowdsec/db:/var/lib/crowdsec
+      - ../traefik/logs:/var/log/traefik:ro   # Read Traefik access logs
+    environment:
+      - COLLECTIONS=crowdsecurity/traefik

@@ -1,0 +1,47 @@
+# Nextcloud AIO — NOT a standard docker-compose setup
+#
+# Nextcloud All-in-One uses a "mastercontainer" pattern:
+# 1. Start the mastercontainer (this file)
+# 2. Access AIO admin at http://SERVER_IP:8080
+# 3. The mastercontainer manages all sub-containers automatically
+#
+# DO NOT manually start individual AIO containers (apache, nextcloud, etc.)
+# The mastercontainer handles their lifecycle.
+
+services:
+  nextcloud-aio-mastercontainer:
+    image: nextcloud/all-in-one:latest
+    container_name: nextcloud-aio-mastercontainer
+    restart: always
+    ports:
+      - "8080:8080"       # AIO admin interface
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - nextcloud_aio_nextcloud:/var/www/html
+      # Optional: mount custom CA cert
+      # - ./cert/nextcloudCA.crt:/etc/ssl/certs/ca-certificates.crt:ro
+    environment:
+      - APACHE_PORT=11000
+      - APACHE_IP_BINDING=192.168.2.210    # Change to your server IP
+      - NEXTCLOUD_MOUNT=/mnt/external       # Optional: external storage mount
+    networks:
+      - nextcloud-aio
+
+networks:
+  nextcloud-aio:
+    name: nextcloud-aio
+
+# AIO sub-containers are managed automatically:
+# - nextcloud-aio-apache     (reverse proxy, port 11000)
+# - nextcloud-aio-nextcloud  (Nextcloud app, port 9000)
+# - nextcloud-aio-database   (PostgreSQL, port 5432)
+# - nextcloud-aio-redis      (Redis cache, port 6379)
+# - nextcloud-aio-collabora  (Collabora Online, port 9980)
+# - nextcloud-aio-clamav     (antivirus scanner)
+# - nextcloud-aio-imaginary  (image processing)
+# - nextcloud-aio-notify-push (push notifications)
+# - nextcloud-aio-whiteboard (collaborative whiteboard, port 3002)
+#
+# Domain: nube.bentomo.es
+# Access AIO admin: http://192.168.2.210:8080
+# Access Nextcloud: https://nube.bentomo.es (proxied through port 11000)

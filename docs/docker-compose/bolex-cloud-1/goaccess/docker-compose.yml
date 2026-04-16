@@ -1,0 +1,13 @@
+# GoAccess — Real-time web log analytics for Nginx Proxy Manager
+
+services:
+  goaccess:
+    image: justsky/goaccess-for-nginxproxymanager:latest
+    container_name: goaccess
+    restart: unless-stopped
+    ports:
+      - "7880:7880"
+    volumes:
+      - ../nginx-proxy-manager/data/npm_data/logs:/opt/log
+    environment:
+      - TZ=Europe/Madrid

@@ -1,0 +1,14 @@
+# NUT WebGUI — Network UPS Tools web interface
+# Monitors UPS devices connected to PiNet1 (192.168.2.200)
+
+services:
+  nut-webgui:
+    image: ghcr.io/superioone/nut_webgui:latest
+    container_name: nut_webgui-nut_webgui-1
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+    environment:
+      - UPSD_ADDR=192.168.2.200    # NUT server (PiNet1)
+      - UPSD_USER=${NUT_USER}      # Set in .env
+      - UPSD_PASS=${NUT_PASS}      # Set in .env

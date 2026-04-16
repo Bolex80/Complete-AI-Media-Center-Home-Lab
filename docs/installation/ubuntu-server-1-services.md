@@ -27,22 +27,29 @@ This server runs the primary web-facing services and acts as the main reverse pr
 | 10 | IT Tools | 8090 | ✅ Running | [Link](../docker-compose/ubuntu-server-1/it-tools/docker-compose.yml) |
 | 11 | Theme Park | 8082/4443 | ✅ Running | [Link](../docker-compose/ubuntu-server-1/themepark/docker-compose.yml) |
 
-### Additional Services (not in original plan)
+### Monitoring & Observability
 
-These services are running but were added after the initial setup. Compose files are managed via Portainer/Dockge.
+| # | Service | Port | Status | Compose |
+|---|---------|------|--------|---------|
+| 12 | Grafana | 3005 | ✅ Running | [Link](../docker-compose/ubuntu-server-1/grafana/docker-compose.yml) |
+| 13 | Prometheus | 9090 | ✅ Running | Included in Grafana compose |
+| 14 | GoAccess | 7889/7890 | ✅ Running | [Link](../docker-compose/ubuntu-server-1/goaccess/docker-compose.yml) |
 
-| # | Service | Port | Notes |
-|---|---------|------|-------|
-| 12 | Grafana | 3005 | Monitoring dashboards — paired with Prometheus |
-| 13 | Prometheus | 9090 | Metrics collection for Grafana |
-| 14 | GoAccess | 7889/7890 | Real-time web log analytics (pairs with NPM) |
-| 15 | OpenSpeedTest | 3000/3011 | Network speed testing |
-| 16 | NUT WebGUI | 9000 | UPS monitoring (Network UPS Tools) |
-| 17 | PeaNUT | 9001 | Alternative UPS monitoring (Nut integration) |
-| 18 | LinkStack | 8190/8191 | Link-in-bio pages (alex.benthem.es + hugo.benthem.es) |
-| 19 | Nebula Sync | — | Pi-Hole configuration replication across nodes |
-| 20 | WatchYourLAN | 8800-8801 | LAN device discovery |
-| 21 | Portainer | 8000/9443 | Docker management UI |
+### Network & UPS Monitoring
+
+| # | Service | Port | Status | Compose |
+|---|---------|------|--------|---------|
+| 15 | NUT WebGUI | 9000 | ✅ Running | [Link](../docker-compose/ubuntu-server-1/nut-webgui/docker-compose.yml) |
+| 16 | PeaNUT | 9001 | ✅ Running | [Link](../docker-compose/ubuntu-server-1/peanut/docker-compose.yml) |
+| 17 | OpenSpeedTest | 3000/3011 | ✅ Running | [Link](../docker-compose/ubuntu-server-1/openspeedtest/docker-compose.yml) |
+
+### Utilities
+
+| # | Service | Port | Status | Compose |
+|---|---------|------|--------|---------|
+| 18 | LinkStack | 8190/8191 | ✅ Running | [Link](../docker-compose/ubuntu-server-1/linkstack/docker-compose.yml) |
+| 19 | Nebula Sync | — | ✅ Running | [Link](../docker-compose/ubuntu-server-1/nebula-sync/docker-compose.yml) |
+| 20 | Portainer | 8000/9443 | ✅ Running | [Link](../docker-compose/ubuntu-server-1/portainer/docker-compose.yml) |
 
 ### Infrastructure Agents
 

@@ -1,0 +1,16 @@
+# Portainer — Docker management web UI
+
+services:
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: unless-stopped
+    ports:
+      - "8000:8000"    # Agent API
+      - "9443:9443"    # Web UI (HTTPS)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - portainer_data:/data
+
+volumes:
+  portainer_data:

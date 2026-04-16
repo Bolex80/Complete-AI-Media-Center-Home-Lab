@@ -3,9 +3,9 @@
 ![BOLEX-Intro image](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/images/intro-color.png)
 
 <p align="center">
-  <a href="#services-overview"><img src="https://img.shields.io/badge/Services-35+-blue" alt="Services"></a>
-  <a href="#hardware-specs"><img src="https://img.shields.io/badge/Hardware-Ryzen_9_5900X-green" alt="Hardware"></a>
-  <a href="#architecture-overview"><img src="https://img.shields.io/badge/GPU-RTX_4060ti_16GB-orange" alt="GPU"></a>
+  <a href="#services-overview"><img src="https://img.shields.io/badge/Services-60+-blue" alt="Services"></a>
+  <a href="#hardware-specs"><img src="https://img.shields.io/badge/Servers-7-green" alt="Servers"></a>
+  <a href="#architecture-overview"><img src="https://img.shields.io/badge/Compose_Files-52-orange" alt="Compose Files"></a>
   <a href="docs/high-availability.md"><img src="https://img.shields.io/badge/HA-Keepalived-red" alt="High Availability"></a>
 </p>
 
@@ -22,7 +22,9 @@
   - [Ubuntu Server 2 Services](#3-ubuntu-server-2-services)
   - [WSL2 Services](#4-wsl2-docker-desktop-services)
   - [Oracle Cloud Services](#5-oracle-cloud-services)
-  - [Common Services](#6-common-services)
+  - [Bolex-Cloud-1 Services](#6-bolex-cloud-1-services)
+  - [OpenClaw Host](#7-openclaw-host)
+  - [Common Services](#8-common-services)
 - [Quick Start](#quick-start)
 - [Architecture Diagram](#architecture-diagram)
 - [Backup Strategy](#backup-strategy)
@@ -114,31 +116,24 @@ The homelab is organized into distinct layers, each serving specific purposes:
 Complete-AI-Media-Center-Home-Lab/
 ├── 📁 docs/
 │   ├── 📁 docker-compose/
-│   │   ├── 📁 raspberry-pi/          # Raspberry Pi Docker services
-│   │   ├── 📁 ubuntu-server-1/     # Main web services
-│   │   ├── 📁 ubuntu-server-2/     # Apps & storage
-│   │   ├── 📁 wsl2-docker-desktop/ # AI/ML services (✅ Complete)
-│   │   │   ├── ollama/
-│   │   │   ├── open-webui/
-│   │   │   ├── litellm/
-│   │   │   ├── postgres/
-│   │   │   ├── immich/
-│   │   │   ├── n8n/
-│   │   │   ├── qdrant/
-│   │   │   ├── tika/
-│   │   │   ├── libretranslate/
-│   │   │   └── metube/
-│   │   └── 📁 oracle-cloud/        # Cloud security services
+│   │   ├── 📁 bolex-cloud-1/         # Web projects + infrastructure (7 compose)
+│   │   ├── 📁 oracle-cloud/          # Pangolin, CrowdSec, Traefik (3 compose)
+│   │   ├── 📁 raspberry-pi/          # HA failover services (8 compose)
+│   │   ├── 📁 ubuntu-server-1/      # Primary web services (21 compose)
+│   │   ├── 📁 ubuntu-server-2/      # Nextcloud AIO, Crafty, Dockhand (3 compose)
+│   │   ├── 📁 wsl2-docker-desktop/  # AI/ML services (10 compose)
+│   │   └── TEMPLATE_REFERENCE.md
 │   ├── 📁 installation/
-│   │   ├── raspberry-pi-services.md    # Pi setup guide
-│   │   ├── ubuntu-server-1-services.md   # Main server guide
-│   │   ├── ubuntu-server-2-services.md   # Storage server guide
-│   │   ├── wsl2-services.md          # AI services guide (✅ Complete)
-│   │   └── oracle-cloud-services.md  # Cloud services guide
-│   └── high-availability.md        # Keepalived HA setup
-├── 📁 images/                        # Architecture diagrams
-├── README.md                         # This file
-└── PROGRESS.md                       # Implementation status
+│   │   ├── raspberry-pi-services.md
+│   │   ├── ubuntu-server-1-services.md
+│   │   ├── ubuntu-server-2-services.md
+│   │   ├── oracle-cloud-services.md
+│   │   ├── openclaw-host-services.md
+│   │   └── wsl2-services.md
+│   └── high-availability.md
+├── 📁 images/
+├── README.md
+└── PROGRESS.md
 ```
 
 ---
@@ -149,18 +144,20 @@ Complete-AI-Media-Center-Home-Lab/
 
 📄 **Full Guide:** [raspberry-pi-services.md](docs/installation/raspberry-pi-services.md)
 
-**Bare-metal Services:**
-- [Pi-Hole](docs/installation/raspberry-pi-services.md#pi-hole) - DNS sinkhole, ad blocker, DHCP server
-- [PiVPN](docs/installation/raspberry-pi-services.md#pivpn) - WireGuard VPN server
-- [Keepalived](docs/high-availability.md) - High availability failover
-- Rpi Monitor - System monitoring
+**Bare-metal Services (PiNet1 only):**
+- [Pi-Hole](docs/installation/raspberry-pi-services.md) v6.4.1 - Primary DNS sinkhole, ad blocker, DHCP server
+- [PiVPN](docs/installation/raspberry-pi-services.md) - WireGuard VPN server (wg0: 10.179.38.1/24)
+- [Keepalived](docs/high-availability.md) - VRRP2 Master (DNS/VPN), VRRP1 Backup (HTTP)
 
-**Docker Services:**
-- [Cloudflare DDNS](docs/installation/raspberry-pi-services.md#cloudflare-ddns) - Dynamic DNS updater
-- Nginx Proxy Manager - Reverse proxy (backup)
-- SearXNG - Metasearch engine (backup)
-- Vaultwarden - Password manager (backup)
-- Homer Dashboard - Service homepage (backup)
+**Docker Services (identical on both PiNet1 and PiNet2):**
+- [Nginx Proxy Manager](docs/docker-compose/raspberry-pi/nginx-proxy-manager/docker-compose.yml) - Reverse proxy (HA backup)
+- [SearXNG](docs/docker-compose/raspberry-pi/searxng/docker-compose.yml) - Metasearch engine with Valkey caching
+- [Vaultwarden](docs/docker-compose/raspberry-pi/vaultwarden/docker-compose.yml) - Password manager (pass.benthem.es)
+- [Homer Dashboard](docs/docker-compose/raspberry-pi/homer-dashboard/docker-compose.yml) - Service homepage
+- [Cloudflare DDNS](docs/docker-compose/raspberry-pi/cloudflare-ddns/docker-compose.yml) - Dynamic DNS (bentomo.es, bolex.es)
+- [Beszel Agent](docs/docker-compose/raspberry-pi/beszel/docker-compose.yml) - System metrics
+- [WatchTower](docs/docker-compose/raspberry-pi/watchtower/docker-compose.yml) - Container updates
+- [WatchYourLAN](docs/docker-compose/raspberry-pi/watchyourlan/docker-compose.yml) - Network device scanner
 
 ---
 
@@ -168,21 +165,27 @@ Complete-AI-Media-Center-Home-Lab/
 
 📄 **Full Guide:** [ubuntu-server-1-services.md](docs/installation/ubuntu-server-1-services.md)
 
-| Service | Purpose | Port | Status |
+| Service | Purpose | Port | Compose |
 |---------|---------|------|--------|
-| Keepalived | HA failover (VRRP1 Master) | - | ✅ Config |
-| Nginx Proxy Manager | Main reverse proxy | 81 | ⏳ Compose |
-| Homer Dashboard | Service homepage | 8080 | ⏳ Compose |
-| SearXNG | Metasearch engine | 8082 | ⏳ Compose |
-| Vaultwarden | Password manager | 8083 | ⏳ Compose |
-| PiHole (Secondary) | DNS backup | 8084 | ⏳ Compose |
-| Uptime Kuma | Service monitoring | 3001 | ✅ Compose |
-| Beszel | System monitoring | 8090 | ✅ Compose |
-| Speedtest Tracker | Internet performance | 8765 | ⏳ Compose |
-| Cloudflare DDNS | Public IP updater | - | ✅ Compose |
-| IT Tools | IT utilities | 8085 | ⏳ Compose |
-| Themepark | App theming | 8086 | ⏳ Compose |
-| Guacamole | Remote desktop gateway | 8087 | ⏳ Compose |
+| Nginx Proxy Manager | Main reverse proxy | 80/81/443 | [✅](docs/docker-compose/ubuntu-server-1/nginx-proxy-manager/docker-compose.yml) |
+| Homer Dashboard | Service homepage | 8080 | [✅](docs/docker-compose/ubuntu-server-1/homer-dashboard/docker-compose.yml) |
+| SearXNG | Metasearch engine | 8070 | [✅](docs/docker-compose/ubuntu-server-1/searxng/docker-compose.yml) |
+| Vaultwarden | Password manager | 8100 | [✅](docs/docker-compose/ubuntu-server-1/vaultwarden/docker-compose.yml) |
+| Pi-Hole + Unbound | Secondary DNS + resolver | 53/83/5335 | [✅](docs/docker-compose/ubuntu-server-1/pihole/docker-compose.yml) |
+| Uptime Kuma | Service monitoring | 3001 | [✅](docs/docker-compose/ubuntu-server-1/uptime-kuma/docker-compose.yml) |
+| Beszel | System monitoring | 8050 | [✅](docs/docker-compose/ubuntu-server-1/beszel/docker-compose.yml) |
+| Speedtest Tracker | Internet performance | 8085/8443 | [✅](docs/docker-compose/ubuntu-server-1/speedtest-tracker/docker-compose.yml) |
+| Cloudflare DDNS | Public IP updater | — | [✅](docs/docker-compose/ubuntu-server-1/cloudflare-ddns/docker-compose.yml) |
+| IT Tools | IT utilities | 8090 | [✅](docs/docker-compose/ubuntu-server-1/it-tools/docker-compose.yml) |
+| Theme Park | App theming | 8082/4443 | [✅](docs/docker-compose/ubuntu-server-1/themepark/docker-compose.yml) |
+| Grafana + Prometheus | Monitoring dashboards | 3005/9090 | [✅](docs/docker-compose/ubuntu-server-1/grafana/docker-compose.yml) |
+| GoAccess | NPM log analytics | 7889/7890 | [✅](docs/docker-compose/ubuntu-server-1/goaccess/docker-compose.yml) |
+| OpenSpeedTest | Network speed test | 3000/3011 | [✅](docs/docker-compose/ubuntu-server-1/openspeedtest/docker-compose.yml) |
+| NUT WebGUI | UPS monitoring | 9000 | [✅](docs/docker-compose/ubuntu-server-1/nut-webgui/docker-compose.yml) |
+| PeaNUT | UPS dashboard | 9001 | [✅](docs/docker-compose/ubuntu-server-1/peanut/docker-compose.yml) |
+| LinkStack | Link-in-bio pages | 8190/8191 | [✅](docs/docker-compose/ubuntu-server-1/linkstack/docker-compose.yml) |
+| Nebula Sync | Pi-Hole sync | — | [✅](docs/docker-compose/ubuntu-server-1/nebula-sync/docker-compose.yml) |
+| Portainer | Docker management | 8000/9443 | [✅](docs/docker-compose/ubuntu-server-1/portainer/docker-compose.yml) |
 
 ---
 
@@ -190,11 +193,14 @@ Complete-AI-Media-Center-Home-Lab/
 
 📄 **Full Guide:** [ubuntu-server-2-services.md](docs/installation/ubuntu-server-2-services.md)
 
-| Service | Purpose | Port | Status |
+> ⚠️ **Important:** This server runs **Nextcloud AIO** (All-in-One), NOT a plain Nextcloud compose. The mastercontainer manages 9 sub-containers automatically.
+
+| Service | Purpose | Port | Compose |
 |---------|---------|------|--------|
-| NextCloud | Personal cloud storage | 8080 | ⏳ Compose |
-| Crafty Controller | Minecraft server management | 8443 | ⏳ Compose |
-| Stirling PDF | PDF manipulation tools | 8081 | ⏳ Compose |
+| Nextcloud AIO | Personal cloud (nube.bentomo.es) | 8080/11000 | [✅](docs/docker-compose/ubuntu-server-2/nextcloud-aio/docker-compose.yml) |
+| Crafty Controller | Minecraft server management | 8123/8443 | [✅](docs/docker-compose/ubuntu-server-2/crafty-controller/docker-compose.yml) |
+| Dockhand | Docker management hub | 3000 | [✅](docs/docker-compose/ubuntu-server-2/dockhand/docker-compose.yml) |
+| Portainer | Docker UI | 8000/9443 | Pre-existing |
 
 ---
 
@@ -228,15 +234,45 @@ Complete-AI-Media-Center-Home-Lab/
 
 📄 **Full Guide:** [oracle-cloud-services.md](docs/installation/oracle-cloud-services.md)
 
-- **PiHole** - Public DNS (via Pangolin)
-- **PiVPN** - Cloud VPN endpoint
-- **SearXNG** - Public search engine
-- **Pangolin** - Zero Trust access platform
-- **CrowdSec** - Collaborative intrusion detection
+**Bolex-Cloud-2 (130.110.233.63) — Zero Trust Gateway:**
+- [Pangolin](docs/docker-compose/oracle-cloud/pangolin/docker-compose.yml) — Zero Trust reverse proxy (manages all web project routing)
+- [Gerbil](docs/docker-compose/oracle-cloud/pangolin/docker-compose.yml) — WireGuard tunnel + port exposure
+- [Traefik](docs/docker-compose/oracle-cloud/traefik/docker-compose.yml) — TLS termination + HTTP routing
+- [CrowdSec](docs/docker-compose/oracle-cloud/crowdsec/docker-compose.yml) — Intrusion detection (monitors Traefik logs)
+- GeoIP Update — MaxMind GeoLite2 databases
+
+**Routing Chain:** `Client → Pangolin → Gerbil → Traefik → Bolex-Cloud-1 backend`
+
+### 6. Bolex-Cloud-1 Services
+
+📄 **Full Guide:** [oracle-cloud-services.md](docs/installation/oracle-cloud-services.md)
+
+| Service | Purpose | Port | Domain | Compose |
+|---------|---------|------|--------|--------|
+| Benthem Website | Family history site | 8880 | benthem.es | [✅](docs/docker-compose/bolex-cloud-1/benthem-website/docker-compose.yml) |
+| Gastos Bentomo | Expense tracker | 8885 | gastos.bentomo.es | [✅](docs/docker-compose/bolex-cloud-1/gastos-bentomo/docker-compose.yml) |
+| Sonemos Juntos | Event site | 8888 | sonemosjuntos.es | [✅](docs/docker-compose/bolex-cloud-1/sonemosjuntos/docker-compose.yml) |
+| Husoma Web | Family website | 8882 | husoma.com | [✅](docs/docker-compose/bolex-cloud-1/husoma-web/docker-compose.yml) |
+| Stirling PDF | PDF tools ("Benthem PDF") | 8090 | — | [✅](docs/docker-compose/bolex-cloud-1/stirling-pdf/docker-compose.yml) |
+| Koffan | Shopping list app | 3000 | — | [✅](docs/docker-compose/bolex-cloud-1/koffan/docker-compose.yml) |
+| GoAccess | NPM log analytics | 7880 | — | [✅](docs/docker-compose/bolex-cloud-1/goaccess/docker-compose.yml) |
+| NPM | Reverse proxy (local) | 80/81/443 | — | Local only |
+| SearXNG | Search engine | 8070 | — | Local only |
+
+### 7. OpenClaw Host
+
+📄 **Full Guide:** [openclaw-host-services.md](docs/installation/openclaw-host-services.md)
+
+The AI agent gateway running [OpenClaw](https://github.com/openclaw/openclaw) v2026.4.12.
+
+- **Clawdio** (ollama/minimax-m2.7:cloud) — Default assistant
+- **Samantha** (ollama/glm-5.1:cloud) — Coding/debugging specialist
+- Telegram + Web UI channels
+- Daily system health cron (pings all servers, reports via Telegram)
 
 ---
 
-### 6. Common Services
+### 8. Common Services
 
 Services running on multiple/all machines:
 
@@ -352,11 +388,19 @@ See [PROGRESS.md](PROGRESS.md) for detailed implementation status and remaining 
 |-----------|--------|----------|
 | WSL2 Docker Compose | ✅ Done | 10/10 |
 | WSL2 Documentation | ✅ Done | Complete |
+| Raspberry Pi Compose | ✅ Done | 8/8 |
+| Raspberry Pi Docs | ✅ Done | Complete |
+| Ubuntu Server 1 Compose | ✅ Done | 21/21 |
 | Ubuntu Server 1 Docs | ✅ Done | Complete |
+| Ubuntu Server 2 Compose | ✅ Done | 3/3 |
 | Ubuntu Server 2 Docs | ✅ Done | Complete |
+| Bolex-Cloud-1 Compose | ✅ Done | 7/7 |
+| Oracle Cloud Compose | ✅ Done | 3/3 |
 | Oracle Cloud Docs | ✅ Done | Complete |
-| Other Docker Compose | ⏳ Pending | 4/22 |
-| Raspberry Pi Docker Docs | ⏳ Pending | Partial |
+| OpenClaw Host Docs | ✅ Done | Complete |
+| High Availability | ✅ Done | Complete |
+| Security Sanitization | ✅ Done | Complete |
+| **Total** | **✅ Done** | **52/52** |
 
 ---
 
