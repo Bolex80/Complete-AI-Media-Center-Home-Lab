@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏠 Bolex Fleet Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f1117;
+            color: #e1e4e8;
+            min-height: 100vh;
+        }
+        .header {
+            background: linear-gradient(135deg, #1a1d23 0%, #2d333b 100%);
+            padding: 20px 30px;
+            border-bottom: 1px solid #30363d;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #f0f6fc;
+        }
+        .header h1 span { color: #7ee787; }
+        .header .timestamp {
+            font-size: 13px;
+            color: #8b949e;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .server-card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 20px;
+            transition: border-color 0.2s;
+        }
+        .server-card:hover { border-color: #58a6ff; }
+        .server-card.status-ok { border-left: 4px solid #7ee787; }
+        .server-card.status-warn { border-left: 4px solid #d29922; }
+        .server-card.status-crit { border-left: 4px solid #f85149; }
+        .server-card.status-off { border-left: 4px solid #484f58; }
+        .server-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+        .server-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #f0f6fc;
+        }
+        .status-badge {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .status-badge.ok { background: #1b3a1e; color: #7ee787; }
+        .status-badge.warn { background: #3a2e1b; color: #d29922; }
+        .status-badge.crit { background: #3a1b1b; color: #f85149; }
+        .status-badge.off { background: #222; color: #484f58; }
+        .metrics-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .metric {
+            background: #0d1117;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .metric-label {
+            font-size: 11px;
+            color: #8b949e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .metric-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f0f6fc;
+            margin-top: 2px;
+        }
+        .metric-value.good { color: #7ee787; }
+        .metric-value.warn { color: #d29922; }
+        .metric-value.crit { color: #f85149; }
+        .bar-container {
+            width: 100%;
+            height: 6px;
+            background: #21262d;
+            border-radius: 3px;
+            margin-top: 4px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+        .bar-fill.good { background: linear-gradient(90deg, #238636, #7ee787); }
+        .bar-fill.warn { background: linear-gradient(90deg, #9e6a03, #d29922); }
+        .bar-fill.crit { background: linear-gradient(90deg, #da3633, #f85149); }
+        .chart-section {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .chart-section h2 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #f0f6fc;
+        }
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .chart-wrapper { position: relative; height: 200px; }
+        .docker-info {
+            font-size: 12px;
+            color: #8b949e;
+            margin-top: 6px;
+        }
+        .updates-badge {
+            display: inline-block;
+            background: #1f6feb;
+            color: #f0f6fc;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 6px;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #484f58;
+            font-size: 12px;
+        }
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            .chart-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏠 Bolex <span>Fleet</span> Dashboard</h1>
+        <div class="timestamp" id="last-update">Loading...</div>
+    </div>
+    <div class="container">
+        <div class="grid" id="server-cards"></div>
+        <div class="chart-section">
+            <h2>📊 24-Hour Trends</h2>
+            <div class="chart-grid">
+                <div class="chart-wrapper"><canvas id="cpu-chart"></canvas></div>
+                <div class="chart-wrapper"><canvas id="mem-chart"></canvas></div>
+                <div class="chart-wrapper"><canvas id="disk-chart"></canvas></div>
+                <div class="chart-wrapper"><canvas id="load-chart"></canvas></div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">Samantha's Fleet Dashboard 🧚‍♀️ — Auto-refreshes every 60s</div>
+
+    <script>
+        const SERVER_ORDER = ['PiNet1','PiNet2','Bentomo_Net','Nextcloud','OpenClaw','Bolex-Cloud-1','Bolex-Cloud-2','WSL2'];
+        const SERVER_IPS = {
+            'PiNet1':'192.168.2.200','PiNet2':'192.168.2.205','Bentomo_Net':'192.168.2.201',
+            'Nextcloud':'192.168.2.210','OpenClaw':'192.168.2.60',
+            'Bolex-Cloud-1':'79.72.49.182','Bolex-Cloud-2':'130.110.233.63','WSL2':'192.168.2.5'
+        };
+        let charts = {};
+        const chartColors = [
+            '#7ee787','#58a6ff','#d29922','#f85149','#bc8cff',
+            '#79c0ff','#ffa657','#ff7b72'
+        ];
+
+        function pctClass(val, warn=70, crit=85) {
+            if (val >= crit) return 'crit';
+            if (val >= warn) return 'warn';
+            return 'good';
+        }
+
+        function barHTML(pct, warn=70, crit=85) {
+            const cls = pctClass(pct, warn, crit);
+            return `<div class="bar-container"><div class="bar-fill ${cls}" style="width:${Math.min(pct,100)}%"></div></div>`;
+        }
+
+        function statusClass(data) {
+            if (!data) return 'off';
+            if (data.updates > 5 || data.mem_pct > 90 || data.disk_pct > 90) return 'crit';
+            if (data.updates > 0 || data.mem_pct > 75 || data.disk_pct > 80) return 'warn';
+            return 'ok';
+        }
+
+        function statusLabel(data) {
+            if (!data) return 'OFFLINE';
+            const cls = statusClass(data);
+            const labels = {ok:'OK',warn:'WARN',crit:'CRIT',off:'OFFLINE'};
+            return labels[cls];
+        }
+
+        function renderCard(name, data) {
+            const cls = statusClass(data);
+            const badge = statusLabel(data);
+            const ip = SERVER_IPS[name] || '';
+            const d = data || {};
+            const updates = d.updates || 0;
+
+            return `
+            <div class="server-card status-${cls}">
+                <div class="server-header">
+                    <div class="server-name">${name} ${updates ? `<span class="updates-badge">${updates} upd</span>` : ''}</div>
+                    <span class="status-badge ${cls}">${badge}</span>
+                </div>
+                <div class="metrics-row">
+                    <div class="metric">
+                        <div class="metric-label">💾 Disk</div>
+                        <div class="metric-value ${pctClass(d.disk_pct||0,80,90)}">${d.disk_pct ?? '—'}%</div>
+                        ${barHTML(d.disk_pct||0,80,90)}
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">🧠 Memory</div>
+                        <div class="metric-value ${pctClass(d.mem_pct||0,75,90)}">${d.mem_pct ?? '—'}%</div>
+                        ${barHTML(d.mem_pct||0,75,90)}
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">⚡ CPU</div>
+                        <div class="metric-value ${pctClass(d.cpu_pct||0,70,90)}">${d.cpu_pct ?? '—'}%</div>
+                        ${barHTML(d.cpu_pct||0,70,90)}
+                    </div>
+                    <div class="metric">
+                        <div class="metric-label">⏱ Uptime</div>
+                        <div class="metric-value">${d.uptime_hours != null ? (d.uptime_hours > 24 ? Math.round(d.uptime_hours/24)+'d' : d.uptime_hours+'h') : '—'}</div>
+                    </div>
+                </div>
+                <div class="docker-info">
+                    📦 ${d.docker_running ?? '—'}/${d.docker_total ?? '—'} containers
+                    ${d.docker_unhealthy && d.docker_unhealthy.length ? '<span style="color:#f85149"> ⚠️ '+d.docker_unhealthy.join(', ')+'</span>' : ''}
+                </div>
+            </div>`;
+        }
+
+        async function fetchLatest() {
+            try {
+                const resp = await fetch('/api/latest');
+                const data = await resp.json();
+                const container = document.getElementById('server-cards');
+                const sortedServers = SERVER_ORDER.filter(s => data[s]).concat(
+                    Object.keys(data).filter(s => !SERVER_ORDER.includes(s))
+                );
+                container.innerHTML = sortedServers.map(name =>
+                    renderCard(name, data[name]?.data)
+                ).join('');
+
+                const timestamps = sortedServers.map(s => data[s]?.timestamp).filter(Boolean);
+                if (timestamps.length) {
+                    const latest = timestamps.sort().reverse()[0];
+                    document.getElementById('last-update').textContent =
+                        'Last update: ' + new Date(latest).toLocaleString();
+                }
+            } catch(e) {
+                console.error('Fetch error:', e);
+            }
+        }
+
+        async function fetchHistory() {
+            try {
+                const allData = {};
+                for (const server of SERVER_ORDER) {
+                    const resp = await fetch(`/api/history/${server}?hours=24`);
+                    allData[server] = await resp.json();
+                }
+                renderCharts(allData);
+            } catch(e) {
+                console.error('History error:', e);
+            }
+        }
+
+        function renderCharts(allData) {
+            const metrics = ['cpu_pct','mem_pct','disk_pct','load_1m'];
+            const chartIds = ['cpu-chart','mem-chart','disk-chart','load-chart'];
+            const titles = ['CPU Usage %','Memory Usage %','Disk Usage %','Load (1m)'];
+
+            metrics.forEach((metric, i) => {
+                const datasets = SERVER_ORDER.map((server, ci) => ({
+                    label: server,
+                    data: (allData[server] || []).map(d => ({
+                        x: new Date(d.timestamp),
+                        y: d[metric] ?? null
+                    })),
+                    borderColor: chartColors[ci],
+                    backgroundColor: chartColors[ci] + '20',
+                    borderWidth: 1.5,
+                    pointRadius: 0,
+                    tension: 0.3,
+                    fill: false
+                }));
+
+                if (charts[metric]) charts[metric].destroy();
+                charts[metric] = new Chart(document.getElementById(chartIds[i]), {
+                    type: 'line',
+                    data: { datasets },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        animation: false,
+                        plugins: {
+                            legend: { display: true, position: 'bottom', labels: { color: '#8b949e', font: {size: 10}, boxWidth: 12 } },
+                            title: { display: true, text: titles[i], color: '#f0f6fc', font: {size: 13} }
+                        },
+                        scales: {
+                            x: { type: 'time', time: { unit: 'hour' }, ticks: { color: '#484f58' }, grid: { color: '#21262d' } },
+                            y: { min: 0, ticks: { color: '#484f58' }, grid: { color: '#21262d' } }
+                        }
+                    }
+                });
+            });
+        }
+
+        // Initial load + refresh
+        fetchLatest();
+        fetchHistory();
+        setInterval(fetchLatest, 60000);
+        setInterval(fetchHistory, 300000);
+    </script>
+</body>
+</html>

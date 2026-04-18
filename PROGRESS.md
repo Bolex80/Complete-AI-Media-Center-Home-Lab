@@ -47,6 +47,7 @@
 - ✅ dockhand (Docker management hub with PostgreSQL)
 
 ### Bolex-Cloud-1 (7 compose files) — NEW section
+- ✅ stats-dashboard (real-time fleet monitoring — Chart.js + FastAPI, stats.bolex.es)
 - ✅ benthem-website (nginx:alpine, :8880)
 - ✅ gastos-bentomo (3-container pipeline, :8885)
 - ✅ husoma-web (nginx:alpine, :8882)
