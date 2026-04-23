@@ -53,7 +53,7 @@
 - ✅ husoma-web (nginx:alpine, :8882)
 - ✅ sonemosjuntos (nginx:alpine, :8888)
 - ✅ stirling-pdf (latest-fat, :8090 — MOVED from Ubuntu Server 2)
-- ✅ koffan (shopping list, :3000)
+- ✅ bentomo-shopping (shopping list, :3000)
 - ✅ goaccess (NPM log analytics, :7880)
 
 ### Oracle Cloud / Bolex-Cloud-2 (3 compose files) — NEW section

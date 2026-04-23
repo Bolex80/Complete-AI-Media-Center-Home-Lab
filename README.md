@@ -254,7 +254,7 @@ Complete-AI-Media-Center-Home-Lab/
 | Sonemos Juntos | Event site | 8888 | sonemosjuntos.es | [✅](docs/docker-compose/bolex-cloud-1/sonemosjuntos/docker-compose.yml) |
 | Husoma Web | Family website | 8882 | husoma.com | [✅](docs/docker-compose/bolex-cloud-1/husoma-web/docker-compose.yml) |
 | Stirling PDF | PDF tools ("Benthem PDF") | 8090 | — | [✅](docs/docker-compose/bolex-cloud-1/stirling-pdf/docker-compose.yml) |
-| Koffan | Shopping list app | 3000 | — | [✅](docs/docker-compose/bolex-cloud-1/koffan/docker-compose.yml) |
+| Bentomo Shopping | Shopping list app | 3000 | — | [✅](docs/docker-compose/bolex-cloud-1/bentomo-shopping/docker-compose.yml) |
 | GoAccess | NPM log analytics | 7880 | — | [✅](docs/docker-compose/bolex-cloud-1/goaccess/docker-compose.yml) |
 | NPM | Reverse proxy (local) | 80/81/443 | — | Local only |
 | SearXNG | Search engine | 8070 | — | Local only |

@@ -22,7 +22,7 @@ Two Oracle Cloud ARM64 (aarch64) VPS instances providing public-facing infrastru
 | 4 | Sonemos Juntos | 8888 | soñemosjuntos.com, sonemosjuntos.es | [Link](../docker-compose/bolex-cloud-1/sonemosjuntos/docker-compose.yml) |
 | 5 | Husoma Web | 8882 | husoma.com, www.husoma.com | [Link](../docker-compose/bolex-cloud-1/husoma-web/docker-compose.yml) |
 | 6 | Stirling PDF | 8090 | — | [Link](../docker-compose/bolex-cloud-1/stirling-pdf/docker-compose.yml) |
-| 7 | Koffan | 3000 | crowdsec.bentomo.es | [Link](../docker-compose/bolex-cloud-1/koffan/docker-compose.yml) |
+| 7 | Bentomo Shopping | 3000 | — | [Link](../docker-compose/bolex-cloud-1/bentomo-shopping/docker-compose.yml) |
 | 8 | GoAccess | 7880 | go.benthem.es | [Link](../docker-compose/bolex-cloud-1/goaccess/docker-compose.yml) |
 | 9 | SearXNG | 8070 | — | Local only |
 
@@ -53,8 +53,8 @@ NPM on Bolex-Cloud-1 handles local SSL termination and some direct routes (GoAcc
 **Stirling PDF ("Benthem PDF"):**
 Custom-branded PDF tool with Spanish locale, no login required. Uses `stirling-pdf:latest-fat` for full feature set (LibreOffice, OCR). Java heap: 2GB-10GB.
 
-**Koffan:**
-Shopping list app with CrowdSec integration. Auth disabled by default (`DISABLE_AUTH=true`).
+**Bentomo Shopping:**
+Shopping list app (formerly Koffan). Supports list sharing, offline mode, and PWA install. Auth enabled with configurable max attempts (`LOGIN_MAX_ATTEMPTS=5`).
 
 **GoAccess:**
 Real-time log analytics paired with NPM. Reads NPM proxy logs for traffic visualization.
