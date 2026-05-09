@@ -37,9 +37,9 @@ OpenClaw is a self-hosted AI agent gateway that connects LLM models to messaging
 
 | Agent | Model | Purpose | Location |
 |-------|-------|---------|----------|
-| Clawdio | ollama/deepseek-v4-flash:cloud | Default assistant, system monitoring, file ops, calendar, email, HA, TTS/STT | OpenClaw gateway |
-| Samantha | ollama/deepseek-v4-flash:cloud | Coding/debugging specialist, web app builder, security audit, fleet monitoring | OpenClaw gateway |
-| HermesIO | docker (deepseek-v4-flash) | Orchestrator agent. Coordinates multi-agent workflows, maintains shared wiki, delegates tasks | WSL2 Docker container |
+| Clawdio | **DeepSeek V4 Flash** via Ollama Cloud (fallback: Kimi K2.5) | Default assistant, system monitoring, file ops, calendar, email, HA, TTS/STT | OpenClaw gateway |
+| Samantha | **DeepSeek V4 Flash** via Ollama Cloud (inherits Clawdio default) | Coding/debugging specialist, web app builder, security audit, fleet monitoring | OpenClaw gateway (sub-agent) |
+| HermesIO | **Kimi K2.6** via Ollama Cloud (vision: same) | Orchestrator agent. Coordinates multi-agent workflows, maintains shared wiki, delegates tasks via HTTP message bus | WSL2 Docker container (nousresearch/hermes-agent) |
 
 **Channels:**
 - Telegram (primary)

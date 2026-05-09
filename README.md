@@ -267,11 +267,13 @@ The AI agent gateway running [OpenClaw](https://github.com/openclaw/openclaw) v2
 
 **Agent Ecosystem:**
 
-| Agent | Role | Model | Notes |
-|-------|------|-------|-------|
-| **HermesIO** | Orchestrator | DeepSeek V4 | Runs as a Docker container on WSL2. Coordinates multi-agent workflows, maintains shared wiki, delegates tasks via HTTP message bus. |
-| **Clawdio** | Right Hand / Default | DeepSeek V4 Flash | Primary assistant answering via Telegram/Discord/web UI. Manages system monitoring, file ops, calendar, email, Home Assistant, TTS/STT. Lives on OpenClaw gateway. |
-| **Samantha** | Coding & Research Expert | DeepSeek V4 Flash | Builds and deploys web apps, audits security, runs fleet health reports. Operates from OpenClaw gateway. |
+| Agent | Role | Model (Provider) | Notes |
+|-------|------|------------------|-------|
+| **HermesIO** | Orchestrator | **Kimi K2.6** via Ollama Cloud | Runs as a Docker container (`nousresearch/hermes-agent:latest`) on WSL2. Coordinates multi-agent workflows, maintains shared wiki, delegates tasks via HTTP message bus. Vision: Kimi K2.6. TTS: Edge-TTS (OpenWebUI relay), STT: local Whisper. |
+| **Clawdio** | Right Hand / Default | **DeepSeek V4 Flash** via Ollama Cloud (fallback: Kimi K2.5) | Primary assistant answering via Telegram/Discord/web UI. Manages system monitoring, file ops, calendar, email, Home Assistant, TTS/STT. Lives on OpenClaw gateway. Default runtime model. |
+| **Samantha** | Coding & Research Expert | **DeepSeek V4 Flash** via Ollama Cloud (inherits Clawdio default) | Builds and deploys web apps, audits security, runs fleet health reports. Operates from OpenClaw gateway as a sub-agent. |
+
+**Available models (on Ollama Cloud):** DeepSeek V4 Flash (default), DeepSeek V4 Pro, Kimi K2.5, Kimi K2.6, MiniMax M2.7, GLM 5.1
 
 **Agent Communication Protocol:**
 - **Message Bus:** HTTP API (`localhost:18080`) — Hermes runs an autossh tunnel from WSL2 → OpenClaw host
