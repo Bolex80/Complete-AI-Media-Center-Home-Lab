@@ -35,10 +35,11 @@ OpenClaw is a self-hosted AI agent gateway that connects LLM models to messaging
 
 **Agents configured:**
 
-| Agent | Model | Purpose |
-|-------|-------|---------|
-| Clawdio | ollama/minimax-m2.7:cloud | Default assistant |
-| Samantha | ollama/glm-5.1:cloud | Coding/debugging specialist |
+| Agent | Model | Purpose | Location |
+|-------|-------|---------|----------|
+| Clawdio | ollama/deepseek-v4-flash:cloud | Default assistant, system monitoring, file ops, calendar, email, HA, TTS/STT | OpenClaw gateway |
+| Samantha | ollama/deepseek-v4-flash:cloud | Coding/debugging specialist, web app builder, security audit, fleet monitoring | OpenClaw gateway |
+| HermesIO | docker (deepseek-v4-flash) | Orchestrator agent. Coordinates multi-agent workflows, maintains shared wiki, delegates tasks | WSL2 Docker container |
 
 **Channels:**
 - Telegram (primary)
@@ -99,6 +100,27 @@ docker-compose up -d
 - Nextcloud (192.168.2.210)
 
 **Reports:** Disk usage, memory usage, uptime, pending OS updates, stopped containers
+
+---
+
+## Agent Communication Protocol
+
+The three agents (HermesIO, Clawdio, Samantha) communicate via an HTTP message bus:
+
+**Architecture:**
+- **HermesIO** runs as a Docker container on WSL2 with an autossh reverse tunnel to the OpenClaw host (port 18080)
+- **Hermes** hosts a comm server on `0.0.0.0:18080` with GET `/messages` and POST `/message` endpoints
+- **Clawdio** polls the bus every 15 minutes (cron job) and responds to delegations
+- **Samantha** is relayed through Clawdio (Clawdio delegates tasks to Samantha's workspace)
+
+**Protocol keys:**
+- `GET /messages` — Read all messages on the bus
+- `POST /message` — Send a message (fields: from, to, content, id)
+- Messages are ID-suffixed for ACK tracking
+- HermesIO orchestrates; Clawdio relays to Samantha as needed
+
+**Shared Wiki:**
+All agents contribute to a shared markdown wiki at `/opt/data/wiki/` (on Hermes container, synced to `~/.hermes/wiki/` on WSL host). The wiki frontend renders this content via the benthem-wiki SvelteKit app.
 
 ---
 

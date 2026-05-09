@@ -265,11 +265,26 @@ Complete-AI-Media-Center-Home-Lab/
 
 The AI agent gateway running [OpenClaw](https://github.com/openclaw/openclaw) v2026.4.12.
 
-- **Clawdio** (ollama/minimax-m2.7:cloud) — Default assistant
-- **Samantha** (ollama/glm-5.1:cloud) — Coding/debugging specialist
-- Telegram + Web UI channels
-- **Wiki Knowledge Base** ([benthem-wiki](https://github.com/Bolex80/benthem-wiki)) — SvelteKit-markdown wiki for documentation
+**Agent Ecosystem:**
+
+| Agent | Role | Model | Notes |
+|-------|------|-------|-------|
+| **HermesIO** | Orchestrator | DeepSeek V4 | Runs as a Docker container on WSL2. Coordinates multi-agent workflows, maintains shared wiki, delegates tasks via HTTP message bus. |
+| **Clawdio** | Right Hand / Default | DeepSeek V4 Flash | Primary assistant answering via Telegram/Discord/web UI. Manages system monitoring, file ops, calendar, email, Home Assistant, TTS/STT. Lives on OpenClaw gateway. |
+| **Samantha** | Coding & Research Expert | DeepSeek V4 Flash | Builds and deploys web apps, audits security, runs fleet health reports. Operates from OpenClaw gateway. |
+
+**Agent Communication Protocol:**
+- **Message Bus:** HTTP API (`localhost:18080`) — Hermes runs an autossh tunnel from WSL2 → OpenClaw host
+- **Protocol:** Hermes orchestrates, Clawdio relays to Samantha as needed
+- **Wiki Knowledge Base:** All agents contribute to a shared SvelteKit-markdown wiki at `/opt/data/wiki/`
+
+**Channels:** Telegram, Discord, Web UI
+
+**Wiki Knowledge Base:** ([benthem-wiki](https://github.com/Bolex80/benthem-wiki)) — SvelteKit-powered markdown wiki with YAML frontmatter, [[wikilinks]], full-text search, dark theme, and Docker deployment.
+
+**Services:**
 - Daily system health cron (pings all servers, reports via Telegram)
+- Hermes message poller (checks for delegations every 15 min)
 
 ---
 
