@@ -35,11 +35,15 @@ OpenClaw is a self-hosted AI agent gateway that connects LLM models to messaging
 
 **Agents configured:**
 
-| Agent | Model | Purpose | Location |
-|-------|-------|---------|----------|
-| Clawdio | **DeepSeek V4 Flash** via Ollama Cloud (fallback: Kimi K2.5) | Default assistant, system monitoring, file ops, calendar, email, HA, TTS/STT | OpenClaw gateway |
-| Samantha | **DeepSeek V4 Flash** via Ollama Cloud (inherits Clawdio default) | Coding/debugging specialist, web app builder, security audit, fleet monitoring | OpenClaw gateway (sub-agent) |
-| HermesIO | **Kimi K2.6** via Ollama Cloud (vision: same) | Orchestrator agent. Coordinates multi-agent workflows, maintains shared wiki, delegates tasks via HTTP message bus | WSL2 Docker container (nousresearch/hermes-agent) |
+| Agent | Primary Model | Fallback | Purpose | Location |
+|-------|--------------|----------|---------|----------|
+| Clawdio | **DeepSeek V4 Flash** (Ollama Cloud) | Kimi K2.6 | Default assistant, system monitoring, file ops, calendar, email, HA, TTS/STT | OpenClaw gateway |
+| Samantha | **GLM 5.1** (Ollama Cloud) | Kimi K2.6 | Coding/debugging specialist, web app builder, security audit, fleet monitoring | OpenClaw gateway (separate agent) |
+| HermesIO | **Kimi K2.6** (Ollama Cloud) | — | Orchestrator agent. Coordinates multi-agent workflows, maintains shared wiki, delegates tasks via HTTP message bus | WSL2 Docker container (nousresearch/hermes-agent) |
+| Emilio | **Kimi K2.6** (Ollama Cloud) | Kimi K2.6 | Spanish-speaking assistant (Junell) | OpenClaw gateway |
+| Junell | **DeepSeek V4 Flash** (Ollama Cloud) | Kimi K2.6 | General assistant for Junell | OpenClaw gateway |
+
+**All fallbacks updated to Kimi K2.6** (Kimi K2.5 retired).
 
 **Channels:**
 - Telegram (primary)

@@ -267,13 +267,15 @@ The AI agent gateway running [OpenClaw](https://github.com/openclaw/openclaw) v2
 
 **Agent Ecosystem:**
 
-| Agent | Role | Model (Provider) | Notes |
-|-------|------|------------------|-------|
-| **HermesIO** | Orchestrator | **Kimi K2.6** via Ollama Cloud | Runs as a Docker container (`nousresearch/hermes-agent:latest`) on WSL2. Coordinates multi-agent workflows, maintains shared wiki, delegates tasks via HTTP message bus. Vision: Kimi K2.6. TTS: Edge-TTS (OpenWebUI relay), STT: local Whisper. |
-| **Clawdio** | Right Hand / Default | **DeepSeek V4 Flash** via Ollama Cloud (fallback: Kimi K2.5) | Primary assistant answering via Telegram/Discord/web UI. Manages system monitoring, file ops, calendar, email, Home Assistant, TTS/STT. Lives on OpenClaw gateway. Default runtime model. |
-| **Samantha** | Coding & Research Expert | **DeepSeek V4 Flash** via Ollama Cloud (inherits Clawdio default) | Builds and deploys web apps, audits security, runs fleet health reports. Operates from OpenClaw gateway as a sub-agent. |
+| Agent | Role | Primary Model | Fallback | Notes |
+|-------|------|--------------|----------|-------|
+| **Clawdio** | Right Hand / Default | **DeepSeek V4 Flash** (Ollama Cloud) | Kimi K2.6 | Primary assistant. Telegram/Discord/Web UI. System monitoring, file ops, calendar, email, Home Assistant, TTS/STT. On OpenClaw gateway. |
+| **Samantha** | Coding & Research Expert | **GLM 5.1** (Ollama Cloud) | Kimi K2.6 | Coding, debugging, web app building, security audits, fleet monitoring. On OpenClaw gateway (separate agent entry). |
+| **HermesIO** | Orchestrator | **Kimi K2.6** (Ollama Cloud) | — | Docker container (`nousresearch/hermes-agent:latest`) on WSL2. Coordinates multi-agent workflows, maintains shared wiki, delegates tasks via HTTP message bus. Vision: Kimi K2.6. TTS: Edge-TTS, STT: local Whisper. |
+| **Emilio** | Spanish-speaking assistant | **Kimi K2.6** (Ollama Cloud) | Kimi K2.6 | For Spanish-language conversations (Junell's assistant). On OpenClaw gateway. |
+| **Junell** | General assistant (Junell) | **DeepSeek V4 Flash** (Ollama Cloud) | Kimi K2.6 | For Junell's conversations. On OpenClaw gateway. |
 
-**Available models (on Ollama Cloud):** DeepSeek V4 Flash (default), DeepSeek V4 Pro, Kimi K2.5, Kimi K2.6, MiniMax M2.7, GLM 5.1
+**Available models (Ollama Cloud):** DeepSeek V4 Flash, DeepSeek V4 Pro, Kimi K2.6, MiniMax M2.7, GLM 5.1
 
 **Agent Communication Protocol:**
 - **Message Bus:** HTTP API (`localhost:18080`) — Hermes runs an autossh tunnel from WSL2 → OpenClaw host
