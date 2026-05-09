@@ -52,6 +52,40 @@ OpenClaw is a self-hosted AI agent gateway that connects LLM models to messaging
 - `/home/clawdio/.openclaw/canvas/` — Web UI hosted embeds
 - `/home/clawdio/.openclaw/cron/` — Scheduled tasks
 
+### ✅ Wiki Knowledge Base
+**Description:** A SvelteKit-powered wiki frontend that renders markdown content from `/opt/data/wiki/`. Serves as the knowledge base for the Hermes agent and Samantha's documentation.
+
+**Source:** [benthem-wiki](https://github.com/Bolex80/benthem-wiki)
+
+**Features:**
+- Markdown + YAML frontmatter pages
+- [[wikilinks]] that resolve against actual file structure
+- Client-side full-text search (Fuse.js)
+- Dark theme with Tailwind CSS
+- Shiki-powered syntax highlighting
+- Docker deployment (multi-stage build)
+
+**Wiki content structure:**
+```
+/opt/data/wiki/
+├── index.md                    # Homepage
+├── entities/                   # Agent, server, service pages
+├── concepts/                   # Technical concept explanations
+├── comparisons/                # Side-by-side comparisons
+└── queries/                    # How-to guides and Q&A
+```
+
+**Deployment:**
+```bash
+# Clone
+cd /opt
+gh repo clone Bolex80/benthem-wiki
+
+# Build and run with docker-compose
+cd benthem-wiki
+docker-compose up -d
+```
+
 ### System Status Cron
 **Description:** Daily health check script that pings all servers and sends a Telegram report.
 **Schedule:** 07:00 UTC (09:00 Madrid) daily

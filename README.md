@@ -268,6 +268,7 @@ The AI agent gateway running [OpenClaw](https://github.com/openclaw/openclaw) v2
 - **Clawdio** (ollama/minimax-m2.7:cloud) — Default assistant
 - **Samantha** (ollama/glm-5.1:cloud) — Coding/debugging specialist
 - Telegram + Web UI channels
+- **Wiki Knowledge Base** ([benthem-wiki](https://github.com/Bolex80/benthem-wiki)) — SvelteKit-markdown wiki for documentation
 - Daily system health cron (pings all servers, reports via Telegram)
 
 ---
