@@ -151,7 +151,7 @@ Complete-AI-Media-Center-Home-Lab/
 
 **Docker Services (identical on both PiNet1 and PiNet2):**
 - [Nginx Proxy Manager](docs/docker-compose/raspberry-pi/nginx-proxy-manager/docker-compose.yml) - Reverse proxy (HA backup)
-- [SearXNG](docs/docker-compose/raspberry-pi/searxng/docker-compose.yml) - Metasearch engine with Valkey caching
+- [SearXNG](docs/docker-compose/raspberry-pi/searxng/docker-compose.yml) - Metasearch engine with Valkey caching. Integrated as a native search skill for the agent ecosystem.
 - [Vaultwarden](docs/docker-compose/raspberry-pi/vaultwarden/docker-compose.yml) - Password manager (pass.benthem.es)
 - [Homer Dashboard](docs/docker-compose/raspberry-pi/homer-dashboard/docker-compose.yml) - Service homepage
 - [Cloudflare DDNS](docs/docker-compose/raspberry-pi/cloudflare-ddns/docker-compose.yml) - Dynamic DNS (bentomo.es, bolex.es)
@@ -235,7 +235,7 @@ Complete-AI-Media-Center-Home-Lab/
 📄 **Full Guide:** [oracle-cloud-services.md](docs/installation/oracle-cloud-services.md)
 
 **Bolex-Cloud-2 (130.110.233.63) — Zero Trust Gateway:**
-- [Pangolin](docs/docker-compose/oracle-cloud/pangolin/docker-compose.yml) — Zero Trust reverse proxy (manages all web project routing)
+- [Pangolin](docs/docker-compose/oracle-cloud/pangolin/docker-compose.yml) — Zero Trust reverse proxy (manages all web project routing). ⚠️ **Admin Policy:** Owner-only modification (Strict Red Line boundary).
 - [Gerbil](docs/docker-compose/oracle-cloud/pangolin/docker-compose.yml) — WireGuard tunnel + port exposure
 - [Traefik](docs/docker-compose/oracle-cloud/traefik/docker-compose.yml) — TLS termination + HTTP routing
 - [CrowdSec](docs/docker-compose/oracle-cloud/crowdsec/docker-compose.yml) — Intrusion detection (monitors Traefik logs)
@@ -271,7 +271,7 @@ The AI agent gateway running [OpenClaw](https://github.com/openclaw/openclaw) v2
 |-------|------|--------------|----------|-------|
 | **Clawdio** | Right Hand / Default | **DeepSeek V4 Flash** (Ollama Cloud) | Kimi K2.6 | Primary assistant. Telegram/Discord/Web UI. System monitoring, file ops, calendar, email, Home Assistant, TTS/STT. On OpenClaw gateway. |
 | **Samantha** | Coding & Research Expert | **GLM 5.1** (Ollama Cloud) | Kimi K2.6 | Coding, debugging, web app building, security audits, fleet monitoring. On OpenClaw gateway (separate agent entry). |
-| **HermesIO** | Orchestrator | **Kimi K2.6** (Ollama Cloud) | — | Docker container (`nousresearch/hermes-agent:latest`) on WSL2. Coordinates multi-agent workflows, maintains shared wiki, delegates tasks via HTTP message bus. Vision: Kimi K2.6. TTS: Edge-TTS, STT: local Whisper. |
+| **Hermes Agent** | Orchestrator | **Kimi K2.6** (Ollama Cloud) | — | Docker container (`nousresearch/hermes-agent:latest`) on WSL2. Coordinates multi-agent workflows, maintains shared wiki, delegates tasks via HTTP message bus. Vision: Kimi K2.6. TTS: Edge-TTS, STT: local Whisper. |
 | **Emilio** | Spanish-speaking assistant | **Kimi K2.6** (Ollama Cloud) | Kimi K2.6 | For Spanish-language conversations (Junell's assistant). On OpenClaw gateway. |
 | **Junell** | General assistant (Junell) | **DeepSeek V4 Flash** (Ollama Cloud) | Kimi K2.6 | For Junell's conversations. On OpenClaw gateway. |
 
@@ -284,7 +284,7 @@ The AI agent gateway running [OpenClaw](https://github.com/openclaw/openclaw) v2
 
 **Channels:** Telegram, Discord, Web UI
 
-**Wiki Knowledge Base:** ([benthem-wiki](https://github.com/Bolex80/benthem-wiki)) — SvelteKit-powered markdown wiki with YAML frontmatter, [[wikilinks]], full-text search, dark theme, and Docker deployment.
+**Wiki Knowledge Base:** ([Benthem LLM Wiki](https://wiki.benthem.es)) — Live hosted SvelteKit-powered markdown wiki. Acts as the central "brain" for the multi-agent system with structured indices (Entities, Concepts, Comparisons, Queries), YAML frontmatter, [[wikilinks]], and full-text search.
 
 **Services:**
 - Daily system health cron (pings all servers, reports via Telegram)
