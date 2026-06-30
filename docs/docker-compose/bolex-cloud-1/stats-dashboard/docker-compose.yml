@@ -1,0 +1,16 @@
+services:
+  stats-dashboard:
+    build: .
+    container_name: stats-dashboard
+    ports:
+      - "8883:8883"
+    volumes:
+      - ./data:/data
+      - /home/clawdio/.ssh:/ssh-keys:ro
+      - ./ssh-config:/ssh-keys/config:ro
+    environment:
+      - API_KEY=${API_KEY:-changeme}
+      - DB_PATH=/data/metrics.db
+    env_file:
+      - .env
+    restart: unless-stopped

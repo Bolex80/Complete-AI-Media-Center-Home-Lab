@@ -1,0 +1,41 @@
+services:
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    restart: unless-stopped
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "83:80/tcp"        # Web UI on port 83 to avoid conflict with NPM
+      - "5443:443/tcp"     # HTTPS Web UI
+    volumes:
+      - ./pihole/etc-pihole:/etc/pihole
+      - ./pihole/etc-dnsmasq.d:/etc/dnsmasq.d
+    environment:
+      - VIRTUAL_HOST=bentomo-net
+      - TZ=Europe/Madrid
+      - PIHOLE_DNS_=unbound#53
+      - DNSSEC=false
+      - DNSMASQ_LISTENING=all
+      - WEBPASSWORD=YOUR_PIHOLE_PASSWORD   # CHANGE ME
+    cap_add:
+      - NET_ADMIN
+    networks:
+      - pihole-unbound
+
+  unbound:
+    image: mvance/unbound:latest
+    container_name: unbound
+    restart: unless-stopped
+    ports:
+      - "5335:53/tcp"
+      - "5335:53/udp"
+    volumes:
+      - ./unbound:/opt/unbound/etc/unbound
+      - ./unbound/root.hints:/opt/unbound/etc/unbound/root.hints
+    networks:
+      - pihole-unbound
+
+networks:
+  pihole-unbound:
+    name: pihole-unbound_default

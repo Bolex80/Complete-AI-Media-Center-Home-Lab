@@ -1,0 +1,14 @@
+# Traefik: Reverse proxy / routing engine for Pangolin
+# Handles TLS termination and route matching
+
+services:
+  traefik:
+    image: traefik:latest
+    container_name: traefik
+    restart: unless-stopped
+    volumes:
+      - ./traefik:/etc/traefik:ro
+      - ./letsencrypt:/letsencrypt
+      - ./traefik/logs:/var/log/traefik
+    # Ports are managed by Gerbil (network_mode: service:gerbil in production)
+    # In this setup, Traefik runs on the Pangolin network

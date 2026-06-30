@@ -1,0 +1,37 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    networks:
+      - default
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama_data:/root/.ollama
+      - ./modelfiles:/modelfiles
+    runtime: nvidia
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434 # Listen on all interfaces
+      - OLLAMA_ORIGINS=* # Allow all origins
+      - OLLAMA_NUM_PARALLEL=4
+      - OLLAMA_MAX_LOADED_MODELS=4
+      - OLLAMA_INACTIVITY_TIMEOUT=48h
+      - NVIDIA_VISIBLE_DEVICES=all
+      - LOG_LEVEL=debug
+      - OLLAMA_KEEP_ALIVE=48h
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [ gpu ]
+networks:
+  default:
+    name: bolex-net
+volumes:
+  ollama_data:
+    name: ollama_data
+  nvidia_driver:
+    external: true

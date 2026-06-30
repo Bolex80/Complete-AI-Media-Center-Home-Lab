@@ -1,0 +1,26 @@
+services:
+  libretranslate:
+    container_name: libretranslate
+    image: libretranslate/libretranslate:latest-cuda
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    environment:
+      - LT_API_KEYS_DB_PATH=/app/db/api_keys.db
+      - LT_API_KEYS=True
+      - LT_REQ_LIMIT=120
+      - LT_UPDATE_MODELS=True
+      - LT_DEBUG=True
+      - PUID=root
+      - LIBRETRANSLATE_LANGUAGES=es,en,fr,de,nl,it,pl,pt,ru
+      - LT_LOAD_ONLY=en,es,it
+    volumes:
+      - ./data_folder/db:/app/db
+      - ./data_folder/data:/root/.local:rw
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu ]

@@ -1,0 +1,17 @@
+# Bentomo Shopping — Shopping list app (PWA, offline-capable)
+
+services:
+  bentomo-shopping:
+    image: ghcr.io/bolex80/shopping:latest
+    container_name: bentomo-shopping
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    volumes:
+      - ./shopping-data:/data
+    environment:
+      - PORT=80
+      - DB_PATH=/data/shopping.db
+      - LOGIN_MAX_ATTEMPTS=5
+      - DISABLE_AUTH=false        # Set to true to disable auth (not recommended for public)
+      - APP_ENV=production

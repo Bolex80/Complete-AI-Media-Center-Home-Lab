@@ -1,0 +1,94 @@
+name: immich
+
+services:
+  immich-server:
+    container_name: immich_server
+    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
+    command: [ "start.sh", "immich" ]
+    volumes:
+      - ${UPLOAD_LOCATION}:/usr/src/app/upload
+      - /etc/localtime:/etc/localtime:ro
+      # External Libraries - Update paths to your own
+      - /path/to/your/photos:/usr/src/app/external:ro
+    environment:
+      TZ: YOUR_TIMEZONE
+      # --- DATABASE ---
+      DB_HOSTNAME: immich_postgres
+      DB_USERNAME: ${DB_USERNAME:-YOUR_DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD:-YOUR_DB_PASSWORD}
+      DB_DATABASE_NAME: ${DB_DATABASE_NAME:-immich}
+      # --- REDIS ---
+      REDIS_HOSTNAME: immich_redis
+      # --- GPU TRANSCODING SETTINGS ---
+      IMMICH_NVENC_ENABLED: "true"
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,video,utility
+    ports:
+      - '2283:2283'
+    depends_on:
+      redis:
+        condition: service_started
+      database:
+        condition: service_started
+      immich-machine-learning:
+        condition: service_started
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu, video, compute, utility ]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:2283/api/server/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  immich-machine-learning:
+    container_name: immich_machine_learning
+    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}-cuda
+    restart: unless-stopped
+    volumes:
+      - model-cache:/cache
+      - ${UPLOAD_LOCATION}:/usr/src/app/upload:ro
+      - /path/to/your/photos:/usr/src/app/external:ro
+    environment:
+      TZ: YOUR_TIMEZONE
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,video,utility
+      MACHINE_LEARNING_WORKERS: 1
+      MACHINE_LEARNING_MODEL_TTL: ${MACHINE_LEARNING_MODEL_TTL:-600}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [ gpu, compute, utility ]
+
+  redis:
+    container_name: immich_redis
+    image: docker.io/redis:6.2-alpine
+    healthcheck:
+      test: redis-cli ping || exit 1
+    restart: unless-stopped
+
+  database:
+    container_name: immich_postgres
+    image: ghcr.io/immich-app/postgres:14-vectorchord0.4.3
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-YOUR_DB_PASSWORD}
+      POSTGRES_USER: ${DB_USERNAME:-YOUR_DB_USERNAME}
+      POSTGRES_DB: ${DB_DATABASE_NAME:-immich}
+      POSTGRES_INITDB_ARGS: '--data-checksums'
+      TZ: YOUR_TIMEZONE
+    volumes:
+      - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
+    shm_size: 128mb
+    restart: unless-stopped
+
+volumes:
+  model-cache:

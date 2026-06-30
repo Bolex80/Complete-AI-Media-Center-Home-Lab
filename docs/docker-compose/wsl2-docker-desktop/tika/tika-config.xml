@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+  <server>
+    <params>
+      <host>0.0.0.0</host>
+      <port>9998</port>
+    </params>
+  </server>
+  <!-- Add additional configuration here as needed -->
+  <!-- For OCR support, add Tesseract configuration -->
+  <!-- For specific parsers, configure parser overrides -->
+</properties>

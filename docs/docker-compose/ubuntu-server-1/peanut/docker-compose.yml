@@ -1,0 +1,16 @@
+# PeaNUT — UPS monitoring dashboard for Network UPS Tools
+# Alternative to NUT WebGUI with a modern UI
+
+services:
+  peanut:
+    image: brandawg93/peanut:latest
+    container_name: PeaNUT
+    restart: unless-stopped
+    ports:
+      - "9001:8080"
+    volumes:
+      - ./config:/config
+    environment:
+      - WEB_HOST=0.0.0.0
+      - WEB_PORT=8080
+      - SETTINGS_FILE=/config/settings.yml

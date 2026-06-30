@@ -1,0 +1,13 @@
+# Husoma Web — Family website (HuSoMa)
+# Simple static site served via nginx
+
+services:
+  husoma-web:
+    image: nginx:alpine
+    container_name: husoma-web
+    restart: unless-stopped
+    ports:
+      - "8882:80"
+    volumes:
+      - ./www:/usr/share/nginx/html:ro
+      - ./nginx/conf/default.conf:/etc/nginx/conf.d/default.conf:ro

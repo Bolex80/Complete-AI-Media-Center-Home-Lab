@@ -1,0 +1,42 @@
+# Pangolin: Zero Trust reverse proxy
+#
+# Pangolin manages routing for all web projects:
+# - benthem.es / www.benthem.es → Bolex-Cloud-1:8880
+# - gastos.bentomo.es → Bolex-Cloud-1:8885
+# - soñemosjuntos.com / sonemosjuntos.es → Bolex-Cloud-1:8888
+# - husoma.com / www.husoma.com → Bolex-Cloud-1:8882
+#
+# Pangolin requires: Pangolin + Gerbil (tunnel) + Traefik (routing)
+
+services:
+  pangolin:
+    image: fosrl/pangolin:ee-latest
+    container_name: pangolin
+    restart: unless-stopped
+    volumes:
+      - ./config:/app/config
+      - ./privateConfig.yml:/config/privateConfig.yml:ro
+    networks:
+      - pangolin
+
+  gerbil:
+    image: fosrl/gerbil:latest
+    container_name: gerbil
+    restart: unless-stopped
+    ports:
+      - "80:80"           # HTTP
+      - "443:443"         # HTTPS
+      - "6060:6060"       # Gerbil API
+      - "8080:8080"       # Gerbil web
+      - "51820:51820/udp" # WireGuard
+      - "21820:21820/udp" # Additional tunnel
+      - "25565:25565"     # Minecraft
+      - "19132:19132/udp" # Bedrock Minecraft
+    volumes:
+      - ./config:/var/config
+    networks:
+      - pangolin
+
+networks:
+  pangolin:
+    name: pangolin

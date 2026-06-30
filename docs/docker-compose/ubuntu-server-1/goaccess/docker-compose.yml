@@ -1,0 +1,34 @@
+# GoAccess — Real-time web log analyzer for Nginx Proxy Manager
+# Two containers: goaccess (analyzer) + goaccess-web (nginx serving reports)
+
+services:
+  goaccess:
+    image: allinurl/goaccess:latest
+    container_name: goaccess
+    restart: unless-stopped
+    ports:
+      - "7889:7889"    # Real-time WebSocket
+    volumes:
+      - ./html:/srv/report
+      - ./geoip:/usr/share/GeoIP:ro
+      - ./db:/var/lib/goaccess
+      - ../nginx-proxy-manager/data/npm_logs:/opt/log:ro
+    environment:
+      - TZ=Europe/Madrid
+    networks:
+      - nginx
+
+  goaccess-web:
+    image: nginx:alpine
+    container_name: goaccess-web
+    restart: unless-stopped
+    ports:
+      - "7890:80"      # Static HTML reports
+    volumes:
+      - ./html:/usr/share/nginx/html:ro
+    networks:
+      - nginx
+
+networks:
+  nginx:
+    name: nginx_default

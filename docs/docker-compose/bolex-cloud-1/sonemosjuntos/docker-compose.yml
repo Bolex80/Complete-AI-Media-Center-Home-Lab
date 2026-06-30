@@ -1,0 +1,14 @@
+# Sonemos Juntos — Event organizing/decorating app for Junell
+# Simple static site served via nginx
+# Domains: soñemosjuntos.com, sonemosjuntos.es
+
+services:
+  sonemos_web:
+    image: nginx:alpine
+    container_name: sonemos_web
+    restart: unless-stopped
+    ports:
+      - "8888:80"
+    volumes:
+      - ./website:/usr/share/nginx/html:ro
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro

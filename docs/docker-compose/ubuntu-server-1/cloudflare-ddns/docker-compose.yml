@@ -1,0 +1,9 @@
+services:
+  cloudflare-ddns:
+    image: favonia/cloudflare-ddns:latest
+    container_name: cloudflare-ddns
+    restart: unless-stopped
+    environment:
+      - CF_API_TOKEN=YOUR_CLOUDFLARE_API_TOKEN   # CHANGE ME
+      - DOMAINS=your-domain.com,your-other-domain.com
+      - TZ=Europe/Madrid

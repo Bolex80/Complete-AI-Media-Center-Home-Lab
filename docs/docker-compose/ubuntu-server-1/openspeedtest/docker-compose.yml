@@ -1,0 +1,10 @@
+# OpenSpeedTest — Self-hosted network speed test
+
+services:
+  openspeedtest:
+    image: openspeedtest/latest:latest
+    container_name: openspeedtest
+    restart: unless-stopped
+    ports:
+      - "3000:3000"   # HTTP
+      - "3011:3001"   # HTTPS
