@@ -48,3 +48,13 @@ This is a personal homelab. Feel free to fork and adapt for your own setup, but 
 <p align="center">
   <i>Built with passion for self-hosting and privacy</i>
 </p>
+
+---
+
+## Network Diagrams
+
+High level architecture:
+![BOLEX-NET](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/images/Bolex-NET.png)
+
+Detailed network infrastructure:
+![BOLEX-NETWORK](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/images/BentomoNET-2025.png)
