@@ -58,3 +58,5 @@ High level architecture:
 
 Detailed network infrastructure:
 ![BOLEX-NETWORK](https://github.com/Bolex80/Complete-AI-Media-Center-Home-Lab/blob/main/images/BentomoNET-2025.png)
+
+> The high-level diagram above reflects the **2026 Proxmox + ZFS + native agent** architecture. The legacy Windows/WSL/VMware-era diagram is preserved as [`Bolex-NET-legacy.png`](images/Bolex-NET-legacy.png).
