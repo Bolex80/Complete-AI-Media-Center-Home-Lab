@@ -23,12 +23,14 @@ The Windows Server 2025 VM (`192.168.2.25`) is dedicated to media acquisition. I
 
 ```powershell
 # WinRM from ai-agents / LAN
-$pw = ConvertTo-SecureString "[REDACTED]" -AsPlainText -Force
-cred = New-Object System.Management.Automation.PSCredential("alex", $pw)
+# NOTE: credentials are NOT stored in this repo. Use your password manager
+# (Vaultwarden) or the environment variable $env:WINRM_PASSWORD.
+$pw = ConvertTo-SecureString $env:WINRM_PASSWORD -AsPlainText -Force
+$cred = New-Object System.Management.Automation.PSCredential("alex", $pw)
 Enter-PSSession -ComputerName 192.168.2.25 -Credential $cred
 
 # qBittorrent WebUI
-http://192.168.2.25:8080  (alex / [REDACTED])
+http://192.168.2.25:8080  (login: alex / see Vaultwarden)
 ```
 
 ## Related
