@@ -1,0 +1,40 @@
+# ── Secrets & credentials ─────────────────────────────────────────────
+# Never commit real credentials. Use env vars / password manager instead.
+*.env
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa
+id_ed25519
+id_ecdsa
+*.secret
+secrets/
+secrets.*
+credentials/
+*.credentials
+*.netrc
+.netrc
+*.tokens
+*.token
+
+# ── Local tooling / OS noise ───────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+*.log
+
+# ── Build artifacts (if any) ───────────────────────────────────────────
+node_modules/
+dist/
+build/
+__pycache__/
+*.pyc
