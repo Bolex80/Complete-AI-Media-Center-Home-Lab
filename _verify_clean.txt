@@ -1,0 +1,1 @@
+test: ConvertTo-SecureString $env:WINRM_PASSWORD -AsPlainText

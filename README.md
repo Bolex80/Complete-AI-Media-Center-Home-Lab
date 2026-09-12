@@ -35,6 +35,45 @@ In **2026 the stack underwent a major consolidation**: the Windows 11 + Hyper-V 
 | Personal cloud | Nextcloud AIO VM 101 (`.70`) |
 | DNS / VPN | PiNet1 (`.200`) / PiNet2 (`.205`) + OPNsense |
 
+## Hardware Specs
+
+The physical fleet behind the lab — currently racked in a TV-cabinet setup, pending a tidy re-housing.
+
+### Complementary Servers 🤖
+- **Router / Secondary hypervisor:** Intel i3 N355, 32GB RAM, 2× 1TB M.2 SSD — [Proxmox](https://www.proxmox.com/en/) VE + [OPNsense](https://opnsense.org/) firewall.
+- **Main Raspberry Pi 4 (2GB):** [WireGuard + PiVPN](https://www.pivpn.io/), [Pi-hole](https://pi-hole.net/), backup [SearXNG](https://github.com/searxng/searxng), [Vaultwarden](https://github.com/dani-garcia/vaultwarden).
+- **Secondary Raspberry Pi 4 (2GB):** same specs, weekly SD-card backups.
+
+Both Pis live in a [GeekPi Cluster Case](https://www.amazon.com/GeeekPi-Raspberry-Cluster-Cooling-Heatsink/dp/B07MW3GM1T) (mini pi-rack).
+
+### Main Server 🖥️
+- **CPU:** AMD Ryzen 9 5900X
+- **RAM:** 64 GB DDR4
+- **GPU:** NVIDIA RTX 4060 Ti 16GB VRAM
+- **Motherboard:** ASRock Taichi B550
+- **Storage:**
+  - 2 TB M.2 NVMe (Windows 11 / Proxmox host OS)
+  - 1 TB M.2 NVMe (Virtual Machines)
+  - 1 TB M.2 NVMe (NextCloud VM)
+  - 1 TB SSD (Windows Server 2025 VM)
+  - 3× 12TB HDD parity Storage Space (main media)
+  - 3× 3TB HDD parity Storage Space (backup)
+- **Other:** Blu-ray RE drive (legacy), 2× 2.5GbE adapters, silent-padding tower case.
+
+### Additional Hardware
+- **Firewall:** [CWWK Intel i3 N355](https://cwwk.net/products/12th-gen-intel-firewall-mini-pc-alder-lake-i3-n305-8-core-n200-n100-fanless-soft-router-proxmox-ddr5-4800mhz-4xi226-v-2-5g), 4× 2.5G Ethernet, fanless
+- **Switch:** [AMPCOM 2.5GbE managed switch](https://www.ampcom.hk/products/ampcom-2-5gbe-managed-switch-8-port-2-5gbase-t-network-switcher-10g-sfp-slot-uplink-web-management-qos-vlan-lacp-fanless) (8-port + 10G SFP+)
+- **WiFi:** [Xiaomi Mesh System AX3000](https://www.mi.com/global/product/xiaomi-mesh-system-ax3000/) (access-point mode)
+- **KVM:** [JetKVM](https://jetkvm.com/) remote controller
+- **Cooling:** 3× 14" USB power fans
+- **UPS 1:** [CyberPower VP1000ELCD](https://www.cyberpower.com/eu/en/product/sku/vp1000elcd) — networking + Pis (~40 min)
+- **UPS 2:** [Schneider Electric APC Back-UPS 1200VA](https://www.se.com/il/en/product/BX1200MI-GR/apc-backups-1200va-230v-avr-schuko-sockets/) — main server (~10 min)
+
+### Power Consumption
+- **Network equipment:** 50–60W average (routers, Pis, switch, KVM, external HD)
+- **Main server idle:** 150–160W (up to 350W under GPU load)
+- **Total average:** 200–220W semi-idle
+
 ## Living documentation
 
 The detailed, day-to-day operational truth lives in the **Benthem LLM Wiki** at [https://wiki.benthem.es](https://wiki.benthem.es). This repository provides a stable public narrative, historical reference, and runbook snapshot.
