@@ -62,7 +62,7 @@ Both Pis live in a [GeekPi Cluster Case](https://www.amazon.com/GeeekPi-Raspberr
 
 ### Additional Hardware
 - **Firewall:** [CWWK Intel i3 N355](https://cwwk.net/products/12th-gen-intel-firewall-mini-pc-alder-lake-i3-n305-8-core-n200-n100-fanless-soft-router-proxmox-ddr5-4800mhz-4xi226-v-2-5g), 4× 2.5G Ethernet, fanless
-- **Switch:** [AMPCOM 2.5GbE managed switch](https://www.ampcom.hk/products/ampcom-2-5gbe-managed-switch-8-port-2-5gbase-t-network-switcher-10g-sfp-slot-uplink-web-management-qos-vlan-lacp-fanless) (8-port + 10G SFP+)
+- **Switch:** Mercusys MS108GS-M2 — 2.5 Gigabit, 8-port, 2.5 Gbps, Ethernet RJ45, metal case, plug-and-play, NAS 2.5G ([Amazon](https://www.amazon.es/dp/B0FRHJXYR2))
 - **WiFi:** [Xiaomi Mesh System AX3000](https://www.mi.com/global/product/xiaomi-mesh-system-ax3000/) (access-point mode)
 - **KVM:** [JetKVM](https://jetkvm.com/) remote controller
 - **Cooling:** 3× 14" USB power fans
@@ -70,9 +70,9 @@ Both Pis live in a [GeekPi Cluster Case](https://www.amazon.com/GeeekPi-Raspberr
 - **UPS 2:** [Schneider Electric APC Back-UPS 1200VA](https://www.se.com/il/en/product/BX1200MI-GR/apc-backups-1200va-230v-avr-schuko-sockets/) — main server (~10 min)
 
 ### Power Consumption
-- **Network equipment:** 50–60W average (routers, Pis, switch, KVM, external HD)
-- **Main server idle:** 150–160W (up to 350W under GPU load)
-- **Total average:** 200–220W semi-idle
+- **Network equipment:** 60–80W average (routers, Pis, switch, KVM, external HD)
+- **Main server idle:** 160–250W semi-idle (up to 350W under GPU load)
+- **Total average:** 220–330W semi-idle
 
 ## Living documentation
 
